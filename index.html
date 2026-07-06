@@ -3,8 +3,8 @@
 <head>
 <script>document.documentElement.classList.add("js");document.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.body.classList.add("loaded")})});</script>
 <meta charset="UTF-8">
-<meta name="build" content="2026-07-07-L3-PROOF">
-<!-- BUILD: 2026-07-07-L3-PROOF -->
+<meta name="build" content="2026-07-07-L4-PROOF">
+<!-- BUILD: 2026-07-07-L4-PROOF -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory</title>
 <meta name="description" content="Buy, sell and invest in Dubai and Abu Dhabi property with Iffy Khan. Advisory-led guidance across off-plan, ready homes, resale and investment opportunities.">
@@ -91,11 +91,18 @@ setTimeout(function(){
   try{
     var b=document.getElementById('buildBadge');
     var img=document.querySelector('.hero-st img');
-    var an=img?getComputedStyle(img).animationName.split(',')[0]:'noimg';
-    var rm=matchMedia('(prefers-reduced-motion: reduce)').matches?'RM-ON':'rm-off';
-    b.textContent='L2 · w'+innerWidth+' · '+an+' · '+rm;
+    if(!img){b.textContent='L3 · NO IMG';return;}
+    var t1=getComputedStyle(img).transform;
+    setTimeout(function(){
+      var t2=getComputedStyle(img).transform;
+      var moving=(t1!==t2);
+      var loaded=(img.complete&&img.naturalWidth>0);
+      b.textContent='L3 · '+(moving?'MOVING':'FROZEN')+' · img:'+(loaded?'ok':'FAILED')+' · w'+innerWidth;
+      b.style.background=(moving&&loaded)?'#2E8B57':'#B3382C';
+      b.style.color='#fff';
+    },800);
   }catch(e){}
-},1200);
+},1500);
 </script>
 
 <!-- LOADER -->
