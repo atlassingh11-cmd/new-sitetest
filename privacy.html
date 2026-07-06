@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="build" content="2026-07-06-K">
+<!-- BUILD: 2026-07-06-K -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy | Iffy Khan</title>
+<meta name="description" content="How enquiries made through iffykhan.ae are handled.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://iffykhan.ae/privacy.html">
+<meta name="theme-color" content="#0B0B0B">
+<link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css?v=mobile-anim-3">
+</head>
+<body class="loaded">
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a href="index.html#top" class="brand" aria-label="Iffy Khan home">
+      <span class="b1">Iffy Khan</span>
+      <span class="b2">Property Advisory · Dubai</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="index.html#services">Buying</a>
+      <a href="index.html#selling">Selling</a>
+      <a href="index.html#communities">Areas</a>
+      <a href="index.html#tools">Tools</a>
+      <a href="about.html">About</a>
+      <a href="index.html#testimonials">Reviews</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="index.html#contact" class="btn btn-line">Contact</a>
+      <a href="index.html#contact" class="btn btn-dark">Book Consultation</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="mMenu" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="m-menu" id="mMenu">
+  <a href="index.html#services">Buying</a>
+  <a href="index.html#selling">Selling</a>
+  <a href="index.html#communities">Areas</a>
+  <a href="index.html#tools">Tools</a>
+  <a href="about.html">About Iffy</a>
+  <a href="index.html#testimonials">Reviews</a>
+  <a href="index.html#contact">Contact</a>
+  <a href="index.html#contact" class="btn btn-dark">Book Consultation</a>
+</div>
+<main id="top">
+<section class="section" style="padding-top:clamp(7rem,12vw,9rem)">
+  <div class="wrap" style="max-width:760px">
+    <span class="eyebrow">Privacy</span>
+    <h1 style="font-size:clamp(2.2rem,4.5vw,3.2rem);margin:1.1rem 0 1.4rem">How your details are handled.</h1>
+    <div style="max-width:62ch">
+      <p class="quiet" style="margin-bottom:1rem">Enquiries made through this site are sent directly to Iffy Khan via WhatsApp, phone or email. Your details are used only to respond to your enquiry and are not sold or shared with third parties.</p>
+      <p class="quiet" style="margin-bottom:1rem">This site does not use tracking cookies. Information you provide in the contact form is transmitted through WhatsApp when you choose to send it; it is not stored on this website.</p>
+      <p class="quiet" style="margin-bottom:1rem">Information on this site is for guidance only and is not financial advice. No returns are guaranteed. Fees, availability and costs should be confirmed at the time of purchase.</p>
+      <p class="quiet">To ask about your data, or to have your details removed from any correspondence, contact <a href="mailto:iffy@kamaniliving.com" style="text-decoration:underline;color:inherit">iffy@kamaniliving.com</a>.</p>
+    </div>
+    <div style="margin-top:2rem"><a href="index.html" class="btn btn-dark">Back to the site</a></div>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <a href="index.html#top" class="brand"><span class="b1" style="color:#F4EFE6">Iffy Khan</span><span class="b2" style="color:#D8C3A5">Property Advisory · Dubai</span></a>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="index.html#services">Buying</a><a href="index.html#selling">Selling</a><a href="index.html#communities">Areas</a><a href="index.html#tools">Tools</a><a href="about.html">About</a><a href="index.html#testimonials">Reviews</a><a href="index.html#contact">Contact</a><a href="privacy.html">Privacy</a>
+      </nav>
+    </div>
+    <div class="foot-meta">
+      <span>© 2026 Iffy Khan. All rights reserved</span>
+      <span>Iffy Khan · Property advisory through Kamani Living · Office 104, Building 4, Dubai Hills Business Park, Dubai, UAE</span>
+      <span>Information on this site is for guidance only and is not financial advice. No returns are guaranteed.</span>
+      <span>RERA/DLD licence details and brokerage legal information to be confirmed before final launch.</span>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+var nav=document.querySelector('header');
+function onScroll(){if(nav)nav.classList.toggle('scrolled',window.scrollY>40);}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+var burger=document.getElementById('burger'),menu=document.getElementById('mMenu');
+function toggleMenu(force){if(!burger||!menu)return;var open=force!==undefined?force:burger.getAttribute('aria-expanded')!=='true';
+ burger.setAttribute('aria-expanded',open);burger.setAttribute('aria-label',open?'Close menu':'Open menu');
+ menu.classList.toggle('open',open);document.body.classList.toggle('menu-open',open);document.body.style.overflow=open?'hidden':'';}
+if(burger&&menu){burger.addEventListener('click',function(){toggleMenu();});
+menu.addEventListener('click',function(e){if(e.target===menu)toggleMenu(false);});
+menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){toggleMenu(false);});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')toggleMenu(false);});}
+})();
+</script>
+</body>
+</html>
