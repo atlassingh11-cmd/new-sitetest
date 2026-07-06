@@ -585,3 +585,56 @@ figure.reveal.vis,.ed.reveal.vis{transform:none}
 @media (prefers-reduced-motion: reduce) {
   .vision .vis-item, .vision .vis-item img { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
+
+
+/* ============ TEMPORARY PROOF BUILD — REMOVE AFTER MOBILE CONFIRMATION ============ */
+@media (max-width: 860px) {
+  .morph { display: none !important; }
+  .morph-static { display: block !important; }
+  .hero-st { position: relative !important; overflow: hidden !important; }
+  .hero-st img {
+    animation: mobileHeroProof 6s ease-in-out infinite alternate !important;
+    transform-origin: center center !important;
+    will-change: transform !important;
+  }
+  .hero-st .eyebrow,
+  .hero-st .disp,
+  .hero-st p,
+  .hero-st .btn {
+    opacity: 0;
+    transform: translateY(22px);
+    animation: mobileTextProof .7s ease forwards !important;
+  }
+  .hero-st .eyebrow { animation-delay: .15s !important; }
+  .hero-st .disp { animation-delay: .35s !important; }
+  .hero-st p { animation-delay: .55s !important; }
+  .hero-st .btn { animation-delay: .75s !important; }
+
+  .vision .vis-item {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .vision .vis-item.in,
+  .vision .vis-item.vis,
+  .vision .vis-item.on {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .vision .vis-item img {
+    transform: scale(1.1);
+    transition: transform 1.2s ease;
+  }
+  .vision .vis-item.in img,
+  .vision .vis-item.vis img,
+  .vision .vis-item.on img {
+    transform: scale(1);
+  }
+}
+@keyframes mobileHeroProof {
+  0% { transform: scale(1.18) translate3d(-3%, 2%, 0); }
+  100% { transform: scale(1.03) translate3d(3%, -2%, 0); }
+}
+@keyframes mobileTextProof {
+  to { opacity: 1; transform: translateY(0); }
+}
