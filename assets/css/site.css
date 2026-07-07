@@ -371,6 +371,12 @@ form.lead .btn{width:100%;margin-top:.3rem}
 .form-status{display:none;text-align:center;padding:1rem;border-radius:14px;font-size:.92rem}
 .form-status.ok{display:block;background:rgba(191,161,106,.12);border:1px solid rgba(191,161,106,.35);color:var(--gold-deep)}
 
+.to-top{flex:0 0 auto;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--glass);color:var(--gold);display:flex;align-items:center;justify-content:center;transition:background .3s,transform .3s}
+.to-top:hover{background:var(--gold);color:#0B0B0B;transform:translateY(-3px)}
+.foot-credit{margin-top:.6rem;letter-spacing:.14em;text-transform:uppercase;font-size:.66rem}
+.foot-credit a{color:var(--gold-deep);transition:color .3s}
+.foot-credit a:hover{color:var(--gold)}
+
 /* ============ FOOTER ============ */
 footer{padding:3.6rem 0 2.4rem;background:#080808;border-top:1px solid var(--line)}
 .foot-grid{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap;align-items:flex-start}
