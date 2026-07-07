@@ -3,8 +3,8 @@
 <head>
 <script>document.documentElement.classList.add("js");document.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.body.classList.add("loaded")})});</script>
 <meta charset="UTF-8">
-<meta name="build" content="2026-07-07-R">
-<!-- BUILD: 2026-07-07-R -->
+<meta name="build" content="2026-07-07-S3">
+<!-- BUILD: 2026-07-07-S3 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory</title>
 <meta name="description" content="Buy, sell and invest in Dubai and Abu Dhabi property with Iffy Khan. Advisory-led guidance across off-plan, ready homes, resale and investment opportunities.">
@@ -41,7 +41,7 @@
   "sameAs": ["https://instagram.com/iffy_realestate"]
 }
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=r1">
+<link rel="stylesheet" href="assets/css/site.css?v=s3">
 <style id="mobileAnimInline">
 /* Mobile runs the REAL cinematic morph hero (same as desktop, lighter pin).
    .morph-static is only a fallback: reduced motion / no sticky support / JS failure (body.no-pin). */
@@ -582,7 +582,22 @@ function toggleMenu(force){
 }
 burger.addEventListener('click',function(){toggleMenu();});
 menu.addEventListener('click',function(e){if(e.target===menu)toggleMenu(false);});
-menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){toggleMenu(false);});});
+menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(e){
+  var href=a.getAttribute('href')||'';
+  toggleMenu(false);
+  /* scroll AFTER the menu closes and body scroll unlocks — otherwise the jump lands wrong */
+  if(href.charAt(0)==='#'){
+    var t=document.querySelector(href);
+    if(t){
+      e.preventDefault();
+      setTimeout(function(){
+        var y=t.getBoundingClientRect().top+window.pageYOffset-28;
+        window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+        if(history.replaceState)history.replaceState(null,'',href);
+      },60);
+    }
+  }
+});});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')toggleMenu(false);});
 
 /* ---- Cinematic morph ---- */
