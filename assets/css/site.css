@@ -109,10 +109,10 @@ body.menu-open .burger span{background:var(--char)!important}
 
 /* ============ CINEMATIC MORPH (signature) ============ */
 .morph{position:relative;height:280svh;background:#0B0B0B}
-.morph-stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#0B0B0B}
+.morph-stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#0B0B0B;clip-path:inset(0)}
 .mscene{position:absolute;inset:0;opacity:0;will-change:opacity}
 .mscene img{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;will-change:transform}
-.mscene video{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;will-change:transform;opacity:0;transition:opacity 1s var(--luxe)}
+.mscene video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s var(--luxe)}
 .mscene video.playing{opacity:1}
 .morph-stage::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,.44),rgba(8,8,8,.08) 42%,rgba(8,8,8,.62) 100%);pointer-events:none}
 .morph-ui{position:absolute;inset:0;z-index:5;display:flex;align-items:flex-end;pointer-events:none}
@@ -235,20 +235,9 @@ body.no-pin .morph-static{display:block}
 .vp-seg i{position:absolute;inset:0;background:var(--gold);transform:scaleY(0);transform-origin:top;display:block}
 .vis-cta{margin-top:clamp(2rem,4vw,3rem);text-align:center}
 @media(max-width:860px){
-  .vis-scroll{height:auto}
-  .vis-stage{position:static;height:auto;overflow:visible;background:none;display:grid;gap:1rem;width:90vw;margin-inline:auto}
-  .vis-item{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3}
-  .js .vis-item{opacity:0;transform:translateY(22px);transition:opacity .9s var(--luxe),transform .9s var(--luxe)}
-  .js .vis-item.vis{opacity:1;transform:none}
-  .vis-item img{position:absolute;inset:0;height:100%}
-  .js .vis-item img{transform:scale(1.06);transition:transform 1.8s var(--luxe)}
-  .js .vis-item.vis img{transform:scale(1)}
-  .vis-cap{left:1.1rem;right:1.1rem;bottom:1.1rem;max-width:none;opacity:0;transform:translateY(14px);transition:opacity .7s var(--luxe) .25s,transform .7s var(--luxe) .25s}
-  .vis-item.vis .vis-cap{opacity:1;transform:none}
-  .vis-cap p{font-size:1.05rem;transition-delay:.4s}
-  .vc-n{margin-bottom:.5rem}
-  .vc-n::after{display:none}
-  .vis-prog{display:none}
+  .vis-cap{left:1.1rem;right:1.1rem;bottom:1.1rem;max-width:none}
+  .vis-cap p{font-size:1rem}
+  .vis-prog{right:1.1rem;bottom:auto;top:16vh}
 }
 @media(prefers-reduced-motion:reduce){
   .vis-scroll{height:auto}
