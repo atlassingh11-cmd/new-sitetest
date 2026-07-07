@@ -3,8 +3,8 @@
 <head>
 <script>document.documentElement.classList.add("js");document.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.body.classList.add("loaded")})});</script>
 <meta charset="UTF-8">
-<meta name="build" content="2026-07-07-Q">
-<!-- BUILD: 2026-07-07-Q -->
+<meta name="build" content="2026-07-07-R">
+<!-- BUILD: 2026-07-07-R -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory</title>
 <meta name="description" content="Buy, sell and invest in Dubai and Abu Dhabi property with Iffy Khan. Advisory-led guidance across off-plan, ready homes, resale and investment opportunities.">
@@ -41,7 +41,7 @@
   "sameAs": ["https://instagram.com/iffy_realestate"]
 }
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=q1">
+<link rel="stylesheet" href="assets/css/site.css?v=r1">
 <style id="mobileAnimInline">
 /* Mobile runs the REAL cinematic morph hero (same as desktop, lighter pin).
    .morph-static is only a fallback: reduced motion / no sticky support / JS failure (body.no-pin). */
@@ -617,9 +617,9 @@ if(rm||!supportsSticky){
         s.querySelectorAll('img').forEach(function(m){m.style.transform=tf;});
       });
       if(heroVid){
-        if(f>1){ if(!heroVid.paused) heroVid.pause(); heroVid.style.visibility='hidden'; }
+        if(f>1){ if(!heroVid.paused) heroVid.pause(); heroVid.style.display='none'; }
         else {
-          heroVid.style.visibility='';
+          heroVid.style.display='';
           if(heroVid.paused && heroVid.classList.contains('playing')) heroVid.play().catch(function(){});
           /* scroll-linked fade-out: video is fully gone by the time scene 2 owns the frame */
           heroVid.style.opacity = f>0.02 ? String(clamp(1-f,0,1)) : '';
