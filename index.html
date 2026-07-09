@@ -3,21 +3,28 @@
 <head>
 <script>document.documentElement.classList.add("js");document.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.body.classList.add("loaded")})});</script>
 <meta charset="UTF-8">
-<meta name="build" content="2026-07-09-U5">
-<!-- BUILD: 2026-07-09-U5 (copy tweaks, service CTAs, mobile footer readability) -->
+<script>/* TEST-DEPLOYMENT INDEXING GUARD — auto-disables on the final domain.
+   Any host that is not iffykhan.ae (e.g. *.workers.dev test URLs) gets a noindex
+   robots meta injected, so the test site cannot enter Google. No change needed at launch. */
+(function(){var h=location.hostname;if(!/(^|\.)iffykhan\.ae$/.test(h)){var m=document.createElement('meta');m.name='robots';m.content='noindex,nofollow';document.head.appendChild(m);}})();</script>
+<meta name="build" content="2026-07-09-U6">
+<!-- BUILD: 2026-07-09-U6 (pre-launch: SEO files, icons, WebP, noindex guard) -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory</title>
 <meta name="description" content="Buy, sell and invest in Dubai and Abu Dhabi property with Iffy Khan. Advisory-led guidance across off-plan, ready homes, resale and investment opportunities.">
 <link rel="canonical" href="https://iffykhan.ae/">
 <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/images/favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
 <meta property="og:title" content="Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory">
 <meta property="og:description" content="Advisory-led guidance across off-plan, ready homes, resale and investment opportunities in Dubai and Abu Dhabi.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://iffykhan.ae/">
 <meta property="og:site_name" content="Iffy Khan">
 <meta property="og:image" content="https://iffykhan.ae/assets/images/og-image.jpg">
-<meta property="og:image:width" content="1600">
-<meta property="og:image:height" content="900">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory">
 <meta name="twitter:description" content="Advisory-led guidance across off-plan, ready homes, resale and investment opportunities in Dubai and Abu Dhabi.">
@@ -33,7 +40,7 @@
   "url": "https://iffykhan.ae/",
   "telephone": "+971585802689",
   "email": "iffy@kamaniliving.com",
-  "worksFor": {"@type": "RealEstateAgent", "name": "Kamani Living"},
+  "worksFor": {"@type": "Organization", "name": "Kamani Living"},
   "description": "Iffy Khan is a Dubai property sales and investment specialist helping clients buy, sell and invest across Dubai and Abu Dhabi. From off-plan launches to ready homes and resale strategy, Iffy handles each move personally through Kamani Living.",
   "address": {"@type": "PostalAddress","streetAddress": "Office 104, Building 4, Dubai Hills Business Park","addressLocality": "Dubai","addressCountry": "AE"},
   "areaServed": ["Dubai", "Abu Dhabi"],
@@ -100,10 +107,10 @@
 <!-- CINEMATIC MORPH -->
 <section class="morph" id="morph" aria-label="A journey through Dubai">
   <div class="morph-stage" id="morphStage">
-    <div class="mscene" data-panx="-1.5" data-pany="0.5"><img src="assets/images/hero-downtown.jpg" alt="Aerial view of Downtown Dubai and the Burj Khalifa above the Dubai Fountain" fetchpriority="high" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')"><video id="heroVideo" src="assets/videos/iffy-hero.mp4?v=2" autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true" tabindex="-1"></video></div>
-    <div class="mscene" data-panx="1.5" data-pany="-0.5"><img loading="lazy" src="assets/images/hero-marina.jpg" alt="Dubai Marina waterfront towers" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')"></div>
-    <div class="mscene" data-panx="-1" data-pany="-1"><img loading="lazy" src="assets/images/hero-palm.jpg" alt="Palm Jumeirah from the air" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')"></div>
-    <div class="mscene" data-panx="1" data-pany="1"><img loading="lazy" src="assets/images/hero-interior.jpg" alt="Bright luxury apartment interior with floor-to-ceiling windows" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')"></div>
+    <div class="mscene" data-panx="-1.5" data-pany="0.5"><img src="assets/images/hero-downtown.webp" alt="Aerial view of Downtown Dubai and the Burj Khalifa above the Dubai Fountain" fetchpriority="high" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')"><video id="heroVideo" src="assets/videos/iffy-hero.mp4?v=2" autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true" tabindex="-1"></video></div>
+    <div class="mscene" data-panx="1.5" data-pany="-0.5"><img loading="lazy" src="assets/images/hero-marina.webp" alt="Dubai Marina waterfront towers" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')"></div>
+    <div class="mscene" data-panx="-1" data-pany="-1"><img loading="lazy" src="assets/images/hero-palm.webp" alt="Palm Jumeirah from the air" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')"></div>
+    <div class="mscene" data-panx="1" data-pany="1"><img loading="lazy" src="assets/images/hero-interior.webp" alt="Bright luxury apartment interior with floor-to-ceiling windows" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')"></div>
 
     <div class="morph-ui">
       <div class="wrap">
@@ -136,10 +143,10 @@
 <!-- Static fallback -->
 <div class="morph-static">
   <section class="hero-st">
-    <img src="assets/images/hero-downtown.jpg" alt="Aerial view of Downtown Dubai and the Burj Khalifa above the Dubai Fountain">
+    <img src="assets/images/hero-downtown.webp" alt="Aerial view of Downtown Dubai and the Burj Khalifa above the Dubai Fountain">
     <div class="wrap">
       <span class="eyebrow reveal-h" style="color:var(--gold-deep)">Private Property Advisory · Dubai &amp; Abu Dhabi</span>
-      <p class="disp reveal-h d1" style="color:#FDFAF3;font-size:clamp(2.2rem,5.5vw,3.8rem);margin:1.2rem 0;line-height:1.08">Dubai &amp; Abu Dhabi property advice, without the hard sell.</p>
+      <h1 class="disp reveal-h d1" style="color:#FDFAF3;font-size:clamp(2.2rem,5.5vw,3.8rem);margin:1.2rem 0;line-height:1.08">Dubai &amp; Abu Dhabi property advice, without the hard sell.</h1>
       <p class="reveal-h d2" style="color:rgba(244,239,230,.9);max-width:40ch">Iffy Khan helps buyers, sellers and investors compare off-plan, ready and resale opportunities, from first call to handover.</p>
       <div class="reveal-h d3" style="display:flex;gap:.9rem;flex-wrap:wrap;margin-top:2rem">
         <a href="#contact" class="btn btn-light">Book a Private Consultation</a>
@@ -170,7 +177,7 @@
     <div class="meet-photo reveal">
       <div class="meet-main"><img loading="lazy" width="880" height="1320" src="assets/images/fallback-iffy.jpg" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')" alt="Iffy Khan, Dubai and Abu Dhabi property specialist, seated beneath a crystal chandelier"></div>
       <div class="meet-badge"><div class="nm">Iffy Khan</div><div class="rl">Dubai &amp; Abu Dhabi Specialist</div></div>
-      <div class="meet-photo2"><img loading="lazy" width="900" height="599" src="assets/images/iffy-event.jpg" onerror="this.parentElement.style.display='none'" alt="Iffy Khan laughing with clients at an event in Dubai"></div>
+      <div class="meet-photo2"><img loading="lazy" width="900" height="599" src="assets/images/iffy-event.webp" onerror="this.parentElement.style.display='none'" alt="Iffy Khan laughing with clients at an event in Dubai"></div>
     </div>
     <div class="meet-copy">
       <span class="eyebrow reveal">Meet Iffy</span>
@@ -188,7 +195,7 @@
   </div>
   <div class="wrap">
     <figure class="meet-wide reveal">
-      <img loading="lazy" width="1280" height="852" src="assets/images/kamani-guest-3.jpg" onerror="this.closest('figure').style.display='none'" alt="Iffy Khan with a guest at the Kamani Living office">
+      <img loading="lazy" width="1280" height="852" src="assets/images/kamani-guest-3.webp" onerror="this.closest('figure').style.display='none'" alt="Iffy Khan with a guest at the Kamani Living office">
       <figcaption>At Kamani Living · Dubai Hills</figcaption>
     </figure>
   </div>
@@ -206,15 +213,15 @@
   <div class="vis-scroll" id="visScroll">
     <div class="vis-stage">
       <div class="vis-item on">
-        <img src="assets/images/palm-before.jpg" alt="Palm Jumeirah during early land reclamation, seen from the air">
+        <img src="assets/images/palm-before.webp" alt="Palm Jumeirah during early land reclamation, seen from the air">
         <div class="vis-cap"><span class="vc-n">01 &middot; The Plan</span><p>Before the address becomes famous, the decision starts with land, location, masterplan and belief in the developer.</p></div>
       </div>
       <div class="vis-item">
-        <img src="assets/images/palm-complete.jpg" alt="Completed Palm Jumeirah from above at sunset" loading="lazy">
+        <img src="assets/images/palm-complete.webp" alt="Completed Palm Jumeirah from above at sunset" loading="lazy">
         <div class="vis-cap"><span class="vc-n">02 &middot; The Landmark</span><p>As the community takes shape, the value depends on infrastructure, access, demand and delivery.</p></div>
       </div>
       <div class="vis-item">
-        <img src="assets/images/palm-lifestyle.jpg" alt="Built-out Palm Jumeirah district with hotels, residences and beachfront" loading="lazy">
+        <img src="assets/images/palm-lifestyle.webp" alt="Built-out Palm Jumeirah district with hotels, residences and beachfront" loading="lazy">
         <div class="vis-cap"><span class="vc-n">03 &middot; The Lifestyle</span><p>The finished result has to work as a real place to live, rent, hold or exit, not just a beautiful render.</p></div>
       </div>
       <div class="vis-prog" aria-hidden="true"><span class="vp-seg"><i></i></span><span class="vp-seg"><i></i></span><span class="vp-seg"><i></i></span></div>
@@ -264,7 +271,7 @@
       <p class="reveal" data-d="2">A focused look at the types of Dubai opportunities Iffy can help clients compare, from family communities to waterfront and branded addresses.</p>
     </div>
     <article class="ed reveal">
-      <img loading="lazy" width="1500" height="844" src="assets/images/the-wilds.jpg" alt="The Wilds by Aldar in Dubailand (render)" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
+      <img loading="lazy" width="1500" height="844" src="assets/images/the-wilds.webp" alt="The Wilds by Aldar in Dubailand (render)" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
       <div class="ed-body">
         <div><span class="dev">Aldar · Dubailand</span><h3>The Wilds</h3><p class="one">Nature-led family villas. Suits end-users and long holds.</p></div>
         <a href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20ask%20about%20The%20Wilds%20by%20Aldar." target="_blank" rel="noopener" class="plink">Discuss this route with Iffy</a>
@@ -272,21 +279,21 @@
     </article>
     <!-- TODO: stock interior stand-in — swap for a real The Edit / Dubai Design District photo when available -->
     <article class="ed reveal">
-      <img loading="lazy" width="1600" height="1067" src="assets/images/the-edit.jpg" alt="Contemporary designer apartment interior" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
+      <img loading="lazy" width="1600" height="1067" src="assets/images/the-edit.webp" alt="Contemporary designer apartment interior" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
       <div class="ed-body">
         <div><span class="dev">Meraas · Dubai Design District</span><h3>The Edit</h3><p class="one">Design-district living. Suits yield investors and urban buyers.</p></div>
         <a href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20ask%20about%20The%20Edit%20by%20Meraas." target="_blank" rel="noopener" class="plink">Discuss this route with Iffy</a>
       </div>
     </article>
     <article class="ed reveal">
-      <img loading="lazy" width="668" height="452" src="assets/images/dubai-islands.jpg" alt="Dubai Islands beachfront masterplan (render)" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
+      <img loading="lazy" width="668" height="452" src="assets/images/dubai-islands.webp" alt="Dubai Islands beachfront masterplan (render)" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
       <div class="ed-body">
         <div><span class="dev">Ellington · Dubai Islands</span><h3>Meriva</h3><p class="one">Early waterfront entry. Suits patient, early-cycle capital.</p></div>
         <a href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20ask%20about%20Meriva%20by%20Ellington%20at%20Dubai%20Islands." target="_blank" rel="noopener" class="plink">Discuss this route with Iffy</a>
       </div>
     </article>
     <article class="ed reveal">
-      <img loading="lazy" width="1240" height="480" src="assets/images/palm-jumeirah.jpg" alt="Aerial view of Palm Jumeirah" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
+      <img loading="lazy" width="1240" height="480" src="assets/images/palm-jumeirah.webp" alt="Aerial view of Palm Jumeirah" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
       <div class="ed-body">
         <div><span class="dev">Palm Jumeirah</span><h3>Palm Developments</h3><p class="one">Finite supply, iconic address. Suits trophy buyers and holders.</p></div>
         <a href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20ask%20about%20Palm%20Jumeirah." target="_blank" rel="noopener" class="plink">Discuss this route with Iffy</a>
@@ -566,14 +573,14 @@ window.imgMissing=imgMissing;window.showMissingBar=showMissingBar;
 
 /* ---- Data ---- */
 var COMMS=[
- {n:"Dubai Hills",t:"Family Living",b:"Families and end-users who want space without leaving the city.",m:"Villas, townhouses and apartments around the golf course and parks.",w:"Dubai Hills Mall, schools and green space in one Emaar master community, between Downtown and Marina.",v:"Family tenants drive demand here. Buy on school runs and park access, not just the view.",alt:"Golf course fairways at Dubai Hills Estate",img:"assets/images/dubai-hills.jpg"},
- {n:"Downtown Dubai",t:"Global Address",b:"Buyers who want the global address, and investors in short-let-friendly towers.",m:"High-rise apartments and branded residences around Burj Khalifa and Dubai Mall.",w:"The Fountain, the Boulevard and year-round visitor demand keep the district liquid.",v:"Downtown trades on recognition. The premium is real, so building quality and service charges decide the return.",alt:"Downtown Dubai skyline with Burj Khalifa",img:"assets/images/downtown.jpg"},
- {n:"Dubai Marina",t:"Waterfront Yield",b:"Lifestyle buyers and investors wanting an established waterfront address.",m:"Apartments, penthouses and serviced residences.",w:"Marina Walk, JBR and the beach, tram and metro links, and deep tenant demand.",v:"Two similar towers can perform very differently. The building, the view line and the service charge make the deal.",alt:"Dubai Marina skyline and waterfront towers",img:"assets/images/dubai-marina.jpg"},
- {n:"Business Bay",t:"City Value",b:"Investors and professionals who want Downtown adjacency at a different entry point.",m:"Mixed-use towers: apartments, hotel apartments and offices along the canal.",w:"Canal-side living minutes from Downtown and Sheikh Zayed Road, with strong short-let appeal.",v:"Supply is heavy here, so the gap between average and good buildings is wide. Selection matters more than the postcode.",alt:"Business Bay towers looking towards Burj Khalifa",img:"assets/images/business-bay.jpg"},
- {n:"Dubai Islands",t:"Early Entry",b:"Early-cycle investors comfortable with a longer horizon.",m:"New off-plan launches across a beachfront masterplan off Deira.",w:"Waterfront living on the city's northern coast, with regeneration upside as the masterplan builds out.",v:"A patience play. Payment plan, developer track record and handover timeline matter more than the render.",alt:"Dubai Islands beachfront masterplan (render)",img:"assets/images/dubai-islands.jpg"},
- {n:"Palm Jumeirah",t:"Finite Supply",b:"Trophy buyers and long-term holders.",m:"Villas on the fronds, apartments and branded residences on the trunk and crescent.",w:"Finite land, beachfront living and resale scarcity that supports pricing.",v:"The Palm is about scarcity. Buy the best line you can afford and think in years, not cycles.",alt:"Aerial view of Palm Jumeirah villas on the fronds",img:"assets/images/palm-jumeirah.jpg"},
- {n:"Dubailand",t:"Space to Grow",b:"Families and value-focused end-users.",m:"Villas and townhouses in newer gated communities, including The Wilds by Aldar.",w:"More space per dirham than central Dubai, with community infrastructure building out.",v:"Judge each community on delivery. Roads, schools and retail arriving on time change everything here.",alt:"The Wilds by Aldar villa community in Dubailand (render)",img:"assets/images/the-wilds.jpg"},
- {n:"Saadiyat, AD",t:"Cultural Prime",b:"End-users and investors who want Abu Dhabi's cultural address.",m:"Luxury villas and apartments in the Saadiyat Cultural District and along the beach.",w:"Louvre Abu Dhabi on the doorstep, with museums and beachfront in one masterplan.",v:"Saadiyat is a different market to Dubai: quieter, supply-controlled and end-user led. Plan accordingly.",alt:"White-sand beachfront on Saadiyat Island",img:"assets/images/saadiyat.jpg"}
+ {n:"Dubai Hills",t:"Family Living",b:"Families and end-users who want space without leaving the city.",m:"Villas, townhouses and apartments around the golf course and parks.",w:"Dubai Hills Mall, schools and green space in one Emaar master community, between Downtown and Marina.",v:"Family tenants drive demand here. Buy on school runs and park access, not just the view.",alt:"Golf course fairways at Dubai Hills Estate",img:"assets/images/dubai-hills.webp"},
+ {n:"Downtown Dubai",t:"Global Address",b:"Buyers who want the global address, and investors in short-let-friendly towers.",m:"High-rise apartments and branded residences around Burj Khalifa and Dubai Mall.",w:"The Fountain, the Boulevard and year-round visitor demand keep the district liquid.",v:"Downtown trades on recognition. The premium is real, so building quality and service charges decide the return.",alt:"Downtown Dubai skyline with Burj Khalifa",img:"assets/images/downtown.webp"},
+ {n:"Dubai Marina",t:"Waterfront Yield",b:"Lifestyle buyers and investors wanting an established waterfront address.",m:"Apartments, penthouses and serviced residences.",w:"Marina Walk, JBR and the beach, tram and metro links, and deep tenant demand.",v:"Two similar towers can perform very differently. The building, the view line and the service charge make the deal.",alt:"Dubai Marina skyline and waterfront towers",img:"assets/images/dubai-marina.webp"},
+ {n:"Business Bay",t:"City Value",b:"Investors and professionals who want Downtown adjacency at a different entry point.",m:"Mixed-use towers: apartments, hotel apartments and offices along the canal.",w:"Canal-side living minutes from Downtown and Sheikh Zayed Road, with strong short-let appeal.",v:"Supply is heavy here, so the gap between average and good buildings is wide. Selection matters more than the postcode.",alt:"Business Bay towers looking towards Burj Khalifa",img:"assets/images/business-bay.webp"},
+ {n:"Dubai Islands",t:"Early Entry",b:"Early-cycle investors comfortable with a longer horizon.",m:"New off-plan launches across a beachfront masterplan off Deira.",w:"Waterfront living on the city's northern coast, with regeneration upside as the masterplan builds out.",v:"A patience play. Payment plan, developer track record and handover timeline matter more than the render.",alt:"Dubai Islands beachfront masterplan (render)",img:"assets/images/dubai-islands.webp"},
+ {n:"Palm Jumeirah",t:"Finite Supply",b:"Trophy buyers and long-term holders.",m:"Villas on the fronds, apartments and branded residences on the trunk and crescent.",w:"Finite land, beachfront living and resale scarcity that supports pricing.",v:"The Palm is about scarcity. Buy the best line you can afford and think in years, not cycles.",alt:"Aerial view of Palm Jumeirah villas on the fronds",img:"assets/images/palm-jumeirah.webp"},
+ {n:"Dubailand",t:"Space to Grow",b:"Families and value-focused end-users.",m:"Villas and townhouses in newer gated communities, including The Wilds by Aldar.",w:"More space per dirham than central Dubai, with community infrastructure building out.",v:"Judge each community on delivery. Roads, schools and retail arriving on time change everything here.",alt:"The Wilds by Aldar villa community in Dubailand (render)",img:"assets/images/the-wilds.webp"},
+ {n:"Saadiyat, AD",t:"Cultural Prime",b:"End-users and investors who want Abu Dhabi's cultural address.",m:"Luxury villas and apartments in the Saadiyat Cultural District and along the beach.",w:"Louvre Abu Dhabi on the doorstep, with museums and beachfront in one masterplan.",v:"Saadiyat is a different market to Dubai: quieter, supply-controlled and end-user led. Plan accordingly.",alt:"White-sand beachfront on Saadiyat Island",img:"assets/images/saadiyat.webp"}
 ];
 
 /* ---- Nav ---- */
@@ -727,7 +734,9 @@ var commList=document.getElementById('commList'),commVisual=document.getElementB
 var ccTitle=document.getElementById('ccTitle'),ccBest=document.getElementById('ccBest'),ccMix=document.getElementById('ccMix'),ccWhy=document.getElementById('ccWhy');
 var cImgs=[];
 COMMS.forEach(function(a,i){
-  var img=document.createElement('img');img.src=a.img;img.alt=a.alt||a.n;img.loading='lazy';img.onerror=function(){imgMissing(this,a.img);};
+  /* area images load on demand (selected + neighbours), not all 8 up front */
+  var img=document.createElement('img');img.alt=a.alt||a.n;img.loading='lazy';img.decoding='async';
+  img.setAttribute('data-src',a.img);img.onerror=function(){imgMissing(this,a.img);};
   commVisual.insertBefore(img,commVisual.firstChild);cImgs.push(img);
   var b=document.createElement('button');b.className='crow';b.setAttribute('role','tab');
   b.innerHTML='<span class="an">'+a.n+'</span><span class="at">'+a.t+'</span>';
@@ -754,8 +763,14 @@ function placePanel(i,animate){
 if(accMQ.addEventListener)accMQ.addEventListener('change',function(){placePanel(curComm,false);});
 /* belt-and-braces: some browsers delay matchMedia change events on rotate/resize */
 window.addEventListener('resize',function(){placePanel(curComm,false);});
+function loadComm(k){
+  if(k<0||k>=cImgs.length)return;
+  var im=cImgs[k];
+  if(im&&!im.getAttribute('src'))im.src=im.getAttribute('data-src');
+}
 function setComm(i){
   curComm=i;
+  loadComm(i);loadComm(i+1);loadComm(i-1);
   cRows.forEach(function(r,k){var on=k===i;r.classList.toggle('on',on);r.setAttribute('aria-selected',on);r.tabIndex=on?0:-1;});
   cImgs.forEach(function(im,k){im.classList.toggle('show',k===i);});
   var a=COMMS[i];

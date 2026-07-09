@@ -1,0 +1,4 @@
+# Host-scoped rules (Cloudflare Pages / Workers static assets syntax).
+# The test deployment must never be indexed; the final domain is unaffected.
+https://new-sitetest.atlassingh11.workers.dev/*
+  X-Robots-Tag: noindex
