@@ -494,6 +494,9 @@ figure.reveal.vis,.ed.reveal.vis,.js figure.reveal.vis,.js .ed.reveal.vis{transf
   .ed-body{flex-direction:column;align-items:flex-start}
   .mprog{right:6vw}
   footer{padding-bottom:7rem}
+  /* mobile footer: more air between the stacked legal lines */
+  .foot-meta{gap:.95rem;font-size:.84rem;line-height:1.65}
+  .foot-meta span{display:block}
   .float-wa{right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));padding:.8rem 1.2rem}
   /* lighter but visible motion on mobile */
   .js .reveal{transform:translateY(24px);transition-duration:.9s}

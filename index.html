@@ -3,8 +3,8 @@
 <head>
 <script>document.documentElement.classList.add("js");document.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.body.classList.add("loaded")})});</script>
 <meta charset="UTF-8">
-<meta name="build" content="2026-07-09-U4">
-<!-- BUILD: 2026-07-09-U4 (anchor landing rework + strapline) -->
+<meta name="build" content="2026-07-09-U5">
+<!-- BUILD: 2026-07-09-U5 (copy tweaks, service CTAs, mobile footer readability) -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory</title>
 <meta name="description" content="Buy, sell and invest in Dubai and Abu Dhabi property with Iffy Khan. Advisory-led guidance across off-plan, ready homes, resale and investment opportunities.">
@@ -40,7 +40,7 @@
   "sameAs": ["https://instagram.com/iffy_realestate"]
 }
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=u4">
+<link rel="stylesheet" href="assets/css/site.css?v=u5">
 <style id="mobileAnimInline">
 /* Mobile runs the REAL cinematic morph hero (same as desktop, lighter pin).
    .morph-static is only a fallback: reduced motion / no sticky support / JS failure (body.no-pin). */
@@ -157,9 +157,9 @@
       <h2 class="reveal" data-d="1">Buy, sell and invest with clarity.</h2>
     </div>
     <div class="svc-grid">
-      <div class="svc reveal"><span class="sn">01</span><h3>Buying</h3><p>Find the right area, compare ready homes versus off-plan, view with purpose and move from offer to SPA and DLD transfer with one point of contact.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20looking%20to%20buy%20in%20Dubai.%20Can%20we%20talk%3F">Talk it through with Iffy</a></div>
-      <div class="svc reveal" data-d="1"><span class="sn">02</span><h3>Selling</h3><p>Price against real comparables, position the property properly and move through buyer qualification, NOC and transfer with a clear resale plan.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20thinking%20about%20selling%20my%20Dubai%20property.%20Can%20we%20talk%3F">Talk it through with Iffy</a></div>
-      <div class="svc reveal" data-d="2"><span class="sn">03</span><h3>Investing</h3><p>Compare yield after service charges, developer track record, payment plans, handover timelines and exit route before you commit.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20discuss%20investing%20in%20Dubai%20property.">Talk it through with Iffy</a></div>
+      <div class="svc reveal"><span class="sn">01</span><h3>Buying</h3><p>Find the right area, compare ready homes versus off-plan, view with purpose and move from offer to SPA and DLD transfer with one point of contact.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20looking%20to%20buy%20in%20Dubai.%20Can%20we%20talk%3F">Discuss Buying</a></div>
+      <div class="svc reveal" data-d="1"><span class="sn">02</span><h3>Selling</h3><p>Price against real comparables, position the property properly and move through buyer qualification, NOC and transfer with a clear resale plan.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20thinking%20about%20selling%20my%20Dubai%20property.%20Can%20we%20talk%3F">Discuss Selling</a></div>
+      <div class="svc reveal" data-d="2"><span class="sn">03</span><h3>Investing</h3><p>Compare yield after service charges, developer track record, payment plans, handover timelines and exit route before you commit.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20discuss%20investing%20in%20Dubai%20property.">Discuss Investing</a></div>
     </div>
   </div>
 </section>
@@ -370,7 +370,7 @@
   <div class="wrap">
     <span class="eyebrow reveal">For Sellers</span>
     <h2 class="reveal" data-d="1">Selling your Dubai property?</h2>
-    <p class="reveal" data-d="2">Your property priced on real comparable transactions, positioned properly and shown to qualified buyers — with NOC and DLD transfer handled through Kamani Living.</p>
+    <p class="reveal" data-d="2">Your property priced against real comparable transactions, positioned properly and shown to qualified buyers, with NOC and DLD transfer handled through Kamani Living.</p>
     <a class="btn btn-light reveal" data-d="2" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20thinking%20about%20selling%20my%20Dubai%20property.%20Can%20we%20talk%3F">Speak to Iffy About Selling</a>
   </div>
 </section>
@@ -752,6 +752,8 @@ function placePanel(i,animate){
   }
 }
 if(accMQ.addEventListener)accMQ.addEventListener('change',function(){placePanel(curComm,false);});
+/* belt-and-braces: some browsers delay matchMedia change events on rotate/resize */
+window.addEventListener('resize',function(){placePanel(curComm,false);});
 function setComm(i){
   curComm=i;
   cRows.forEach(function(r,k){var on=k===i;r.classList.toggle('on',on);r.setAttribute('aria-selected',on);r.tabIndex=on?0:-1;});
