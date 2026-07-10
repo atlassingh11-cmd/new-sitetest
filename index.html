@@ -7,8 +7,8 @@
    Any host that is not iffykhan.ae (e.g. *.workers.dev test URLs) gets a noindex
    robots meta injected, so the test site cannot enter Google. No change needed at launch. */
 (function(){var h=location.hostname;if(!/(^|\.)iffykhan\.ae$/.test(h)){var m=document.createElement('meta');m.name='robots';m.content='noindex,nofollow';document.head.appendChild(m);}})();</script>
-<meta name="build" content="2026-07-10-U7">
-<!-- BUILD: 2026-07-10-U7 (launch-readiness: clean URLs, hero clarity, mobile UX, caching, OG card) -->
+<meta name="build" content="2026-07-10-U9">
+<!-- BUILD: 2026-07-10-U9 (U8 + Property Routes mobile readability fix) -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory</title>
 <meta name="description" content="Buy, sell and invest in Dubai and Abu Dhabi property with Iffy Khan. Advisory-led guidance across off-plan, ready homes, resale and investment opportunities.">
@@ -49,7 +49,7 @@
   "sameAs": ["https://instagram.com/iffy_realestate"]
 }
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=u7">
+<link rel="stylesheet" href="assets/css/site.css?v=u9">
 <style id="mobileAnimInline">
 /* Mobile runs the REAL cinematic morph hero (same as desktop, lighter pin).
    .morph-static is only a fallback: reduced motion / no sticky support / JS failure (body.no-pin). */
@@ -637,12 +637,25 @@ menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',functi
     var t=document.querySelector(href);
     if(t){
       e.preventDefault();
+      /* perceived speed: reveal the destination content and start its image
+         fetches BEFORE we move, so the section is already there on landing */
+      t.querySelectorAll('.reveal,.ed,.vis-item').forEach(function(el){el.classList.add('vis','in');});
+      t.querySelectorAll('img[loading="lazy"]').forEach(function(im){im.loading='eager';});
+      if(t.id==='communities'&&typeof loadComm==='function'){loadComm(curComm);loadComm(curComm+1);loadComm(curComm-1);}
+      var mob=window.matchMedia('(max-width:860px)').matches;
       setTimeout(function(){
-        /* scrollIntoView honours the CSS scroll-margin-top — ONE offset system,
-           shared with native hash navigation. No manual math here. */
-        t.scrollIntoView({behavior:'smooth',block:'start'});
+        if(mob){
+          /* instant jump on mobile — smooth-scrolling 10k+ px on a phone is what
+             made menu taps feel slow. scroll-margin-top still applies. */
+          var d=document.documentElement,prev=d.style.scrollBehavior;
+          d.style.scrollBehavior='auto';
+          t.scrollIntoView({block:'start'});
+          d.style.scrollBehavior=prev;
+        }else{
+          t.scrollIntoView({behavior:'smooth',block:'start'});
+        }
         if(history.replaceState)history.replaceState(null,'',href);
-      },80);
+      },mob?30:80);
     }
   }
 });});
@@ -839,6 +852,19 @@ setComm(0);
   onScroll();
 })();
 
+/* ---- Palm Vision: fetch its three images just before the section arrives ---- */
+(function(){
+  var vs=document.getElementById('vision');
+  if(!vs||!('IntersectionObserver' in window))return;
+  var io=new IntersectionObserver(function(es){
+    if(es[es.length-1].isIntersecting){
+      vs.querySelectorAll('img[loading="lazy"]').forEach(function(im){im.loading='eager';});
+      io.disconnect();
+    }
+  },{rootMargin:'600px 0px'});
+  io.observe(vs);
+})();
+
 /* ---- Reveal ---- */
 if('IntersectionObserver' in window && !rm){
   var io=new IntersectionObserver(function(es){
@@ -857,8 +883,9 @@ document.getElementById('tslPrev').addEventListener('click',function(){rail.scro
 
 /* ---- Float WA ---- */
 var fwa=document.getElementById('floatWa');
-var toolsInView=false,footInView=false,contactInView=false,commInView=false;
-function onWa(){fwa.classList.toggle('show',window.scrollY>window.innerHeight*0.8 && !toolsInView && !footInView && !contactInView && !(commInView&&accMQ.matches));}
+var toolsInView=false,footInView=false,contactInView=false,commInView=false,visInView=false,devsInView=false;
+var mobMQ=window.matchMedia('(max-width:860px)');
+function onWa(){fwa.classList.toggle('show',window.scrollY>window.innerHeight*0.8 && !toolsInView && !footInView && !contactInView && !(commInView&&accMQ.matches) && !((visInView||devsInView)&&mobMQ.matches));}
 window.addEventListener('scroll',onWa,{passive:true});onWa();
 (function(){
 if(!('IntersectionObserver' in window))return;
@@ -875,6 +902,12 @@ if(ft)new IntersectionObserver(function(es){footInView=es[es.length-1].isInterse
 /* on mobile the areas accordion card is full-width — keep the button off it */
 var cm=document.getElementById('communities');
 if(cm)new IntersectionObserver(function(es){commInView=es[es.length-1].isIntersecting;onWa();},{threshold:0.05}).observe(cm);
+/* and keep it off the Palm Vision captions on mobile */
+var vi=document.getElementById('vision');
+if(vi)new IntersectionObserver(function(es){visInView=es[es.length-1].isIntersecting;onWa();},{threshold:0.05}).observe(vi);
+/* and off the Property Routes cards on mobile */
+var dv=document.getElementById('developments');
+if(dv)new IntersectionObserver(function(es){devsInView=es[es.length-1].isIntersecting;onWa();},{threshold:0.05}).observe(dv);
 })();
 
 
