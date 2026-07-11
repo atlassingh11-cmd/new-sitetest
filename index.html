@@ -7,8 +7,8 @@
    Any host that is not iffykhan.ae (e.g. *.workers.dev test URLs) gets a noindex
    robots meta injected, so the test site cannot enter Google. No change needed at launch. */
 (function(){var h=location.hostname;if(!/(^|\.)iffykhan\.ae$/.test(h)){var m=document.createElement('meta');m.name='robots';m.content='noindex,nofollow';document.head.appendChild(m);}})();</script>
-<meta name="build" content="2026-07-10-U13">
-<!-- BUILD: 2026-07-10-U13 (hotfix: remove RERA number from visible footer) -->
+<meta name="build" content="2026-07-10-U14">
+<!-- BUILD: 2026-07-10-U14 (Palm crossfade quantized, intro reveal, cue cutoff, security headers) -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory</title>
 <meta name="description" content="Buy, sell and invest in Dubai and Abu Dhabi property with Iffy Khan. Advisory-led guidance across off-plan, ready homes, resale and investment opportunities.">
@@ -49,7 +49,7 @@
   "sameAs": ["https://instagram.com/iffy_realestate"]
 }
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=u12">
+<link rel="stylesheet" href="assets/css/site.css?v=u14">
 <style id="mobileAnimInline">
 /* Mobile runs the REAL cinematic morph hero (same as desktop, lighter pin).
    .morph-static is only a fallback: reduced motion / no sticky support / JS failure (body.no-pin). */
@@ -684,7 +684,7 @@ if(rm||!supportsSticky){
       var total=r.height-window.innerHeight;
       var p=clamp(-r.top/total,0,1);
       /* scroll cue: gone almost immediately once scrolling starts (~3% progress) */
-      if(cue)cue.style.opacity=String(clamp(1-p*20,0,1));
+      if(cue)if(cue){cue.style.opacity=String(clamp(1-p*20,0,1));cue.style.visibility=p>0.05?'hidden':'';}
       var f=p*(N-1);               /* 0..3 scene position */
       scenes.forEach(function(s,i){
         /* smoothstep-eased stacked cross-dissolve: no dark dip, no abrupt cuts */
@@ -821,6 +821,7 @@ setComm(0);
   var sc=document.getElementById('visScroll');
   if(!sc||rm)return; /* crossfade engine runs on ALL widths; reduced-motion gets static cards */
   var items=[].slice.call(sc.querySelectorAll('.vis-item'));
+  var mobVis=window.matchMedia('(max-width:860px)');
   var segs=[].slice.call(sc.querySelectorAll('.vp-seg i'));
   var cur=-1,tick=false;
   function ease(t){return t*t*(3-2*t);}
@@ -838,15 +839,21 @@ setComm(0);
       if(total<=0)return;
       var p=Math.min(1,Math.max(0,-r.top/total));
       setCap(Math.min(2,Math.floor(p*3)));
-      items.forEach(function(el,k){
-        var x=p*3-k; /* item k fully on for x in [0,1] */
-        var op=1;
-        if(k>0)op*=clamp((x+.3)/.6);      /* fade in across the boundary */
-        if(k<2)op*=clamp((1.3-x)/.6);     /* fade out across the boundary */
-        el.style.opacity=ease(clamp(op)).toFixed(3);
-        var img=el.firstElementChild;
-        if(img)img.style.transform='scale('+(1.09-.05*clamp((x+1)/3)).toFixed(4)+')';
-      });
+      if(mobVis.matches){
+        /* mobile: scenes are class-driven; CSS crossfades .on over ~380ms.
+           Clear any inline styles left over from a desktop-size session. */
+        items.forEach(function(el){el.style.opacity='';var im=el.firstElementChild;if(im)im.style.transform='';});
+      }else{
+        items.forEach(function(el,k){
+          var x=p*3-k; /* item k fully on for x in [0,1] */
+          var op=1;
+          if(k>0)op*=clamp((x+.3)/.6);      /* fade in across the boundary */
+          if(k<2)op*=clamp((1.3-x)/.6);     /* fade out across the boundary */
+          el.style.opacity=ease(clamp(op)).toFixed(3);
+          var img=el.firstElementChild;
+          if(img)img.style.transform='scale('+(1.09-.05*clamp((x+1)/3)).toFixed(4)+')';
+        });
+      }
       segs.forEach(function(s,k){
         s.style.transform='scaleY('+clamp(p*3-k)+')';
       });

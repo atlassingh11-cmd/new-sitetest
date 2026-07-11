@@ -111,6 +111,8 @@ header{position:relative;z-index:130}
 .burger[aria-expanded="true"] span:nth-child(3){top:22px;transform:rotate(-45deg)}
 .m-menu{position:fixed;inset:0;z-index:140;background:#0E0E0E;display:flex;flex-direction:column;justify-content:flex-start;height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:calc(var(--nav-h) + 1.4rem + env(safe-area-inset-top,0px)) 8vw calc(2.6rem + env(safe-area-inset-bottom,0px));gap:.1rem;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .5s,visibility .5s}
 body.menu-open .nav{z-index:150}
+/* the open menu carries its own Book Consultation CTA - hide the header one */
+body.menu-open .nav-cta .btn-dark{display:none}
 body.menu-open .float-wa{opacity:0;pointer-events:none}
 /* iOS can promote <video> to its own layer; kill it outright while the menu is open */
 body.menu-open .mscene video,body.menu-open .hero-st video{display:none!important}
@@ -258,12 +260,18 @@ body.no-pin .morph-static{display:block}
 .vp-seg i{position:absolute;inset:0;background:var(--gold);transform:scaleY(0);transform-origin:top;display:block}
 .vis-cta{margin-top:clamp(2rem,4vw,3rem);text-align:center}
 @media(max-width:860px){
-  /* mobile Palm Vision: mini cinematic pin — the SAME overlapping crossfade
-     engine as desktop/hero, tuned for phones: shorter 200vh track (about one
-     viewport of scrolling through 3 scenes — no long trap), captions raised
-     and enlarged, side progress bars plus a numeric 1/3 label. Transform and
-     opacity only; no scroll-jacking; WhatsApp bubble hidden over the section. */
+  /* mobile Palm Vision: mini cinematic pin, 200vh track. Scenes are QUANTIZED:
+     each scene holds fully visible for its third of the track, with only a
+     short ~380ms crossfade at the switch (JS toggles .on; CSS does the fade) —
+     no long scroll-bound double-exposure. */
   .vis-scroll{height:200vh}
+  .vis-item{transition:opacity .38s var(--ease)}
+  .vis-item.on{opacity:1}
+  .vis-item img{transform:scale(1.05);transition:transform 1.1s var(--luxe)}
+  .vis-item.on img{transform:scale(1)}
+  .vis-cap{transition:opacity .45s var(--ease) .1s,transform .45s var(--ease) .1s}
+  /* Palm intro text: position-only reveal — readable the moment it enters */
+  #vision .reveal{opacity:1;transition-duration:.45s}
   .vis-cap{left:1.1rem;right:1.1rem;bottom:2.4rem;max-width:none}
   .vis-cap p{font-size:1.08rem}
   .vis-prog{right:1.1rem;bottom:auto;top:16vh}
