@@ -7,8 +7,8 @@
    Any host that is not iffykhan.ae (e.g. *.workers.dev test URLs) gets a noindex
    robots meta injected, so the test site cannot enter Google. No change needed at launch. */
 (function(){var h=location.hostname;if(!/(^|\.)iffykhan\.ae$/.test(h)){var m=document.createElement('meta');m.name='robots';m.content='noindex,nofollow';document.head.appendChild(m);}})();</script>
-<meta name="build" content="2026-07-10-U14">
-<!-- BUILD: 2026-07-10-U14 (Palm crossfade quantized, intro reveal, cue cutoff, security headers) -->
+<meta name="build" content="2026-07-10-U15">
+<!-- BUILD: 2026-07-10-U15 (final QA: form, AD wording+route, a11y, cue, h1) -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iffy Khan | Dubai &amp; Abu Dhabi Property Advisory</title>
 <meta name="description" content="Buy, sell and invest in Dubai and Abu Dhabi property with Iffy Khan. Advisory-led guidance across off-plan, ready homes, resale and investment opportunities.">
@@ -49,7 +49,7 @@
   "sameAs": ["https://instagram.com/iffy_realestate"]
 }
 </script>
-<link rel="stylesheet" href="assets/css/site.css?v=u14">
+<link rel="stylesheet" href="assets/css/site.css?v=u15">
 <style id="mobileAnimInline">
 /* Mobile runs the REAL cinematic morph hero (same as desktop, lighter pin).
    .morph-static is only a fallback: reduced motion / no sticky support / JS failure (body.no-pin). */
@@ -148,7 +148,7 @@
     <img src="assets/images/hero-downtown.webp" alt="Aerial view of Downtown Dubai and the Burj Khalifa above the Dubai Fountain">
     <div class="wrap">
       <span class="eyebrow reveal-h" style="color:var(--gold-deep)">Advisory through Kamani Living · Dubai &amp; Abu Dhabi</span>
-      <h1 class="disp reveal-h d1" style="color:#FDFAF3;font-size:clamp(2.2rem,5.5vw,3.8rem);margin:1.2rem 0;line-height:1.08">Make your next Dubai or Abu&nbsp;Dhabi property move with more certainty.</h1>
+      <p class="disp reveal-h d1" style="color:#FDFAF3;font-size:clamp(2.2rem,5.5vw,3.8rem);margin:1.2rem 0;line-height:1.08">Make your next Dubai or Abu&nbsp;Dhabi property move with more certainty.</p>
       <p class="reveal-h d2" style="color:rgba(244,239,230,.9);max-width:40ch">Direct, data-led advice for buyers, sellers and investors across off-plan, ready and resale homes, from shortlist to handover.</p>
       <div class="reveal-h d3" style="display:flex;gap:.9rem;flex-wrap:wrap;margin-top:2rem">
         <a href="#contact" class="btn btn-light">Discuss my property plans</a>
@@ -166,9 +166,9 @@
       <h2 class="reveal" data-d="1">Buy, sell and invest with clarity.</h2>
     </div>
     <div class="svc-grid">
-      <div class="svc reveal"><span class="sn">01</span><h3>Buying</h3><p>Find the right area, compare ready homes versus off-plan, view with purpose and move from offer to SPA and DLD transfer with one point of contact.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20looking%20to%20buy%20in%20Dubai.%20Can%20we%20talk%3F">Discuss Buying</a></div>
-      <div class="svc reveal" data-d="1"><span class="sn">02</span><h3>Selling</h3><p>Price against real comparables, position the property properly and move through buyer qualification, NOC and transfer with a clear resale plan.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20thinking%20about%20selling%20my%20Dubai%20property.%20Can%20we%20talk%3F">Discuss Selling</a></div>
-      <div class="svc reveal" data-d="2"><span class="sn">03</span><h3>Investing</h3><p>Compare yield after service charges, developer track record, payment plans, handover timelines and exit route before you commit.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20discuss%20investing%20in%20Dubai%20property.">Discuss Investing</a></div>
+      <div class="svc reveal"><span class="sn">01</span><h3>Buying</h3><p>Find the right area, compare ready homes versus off-plan, view with purpose and move from offer to SPA and DLD transfer with one point of contact.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20looking%20to%20buy%20in%20Dubai%20or%20Abu%20Dhabi.%20Can%20we%20talk%3F">Discuss Buying</a></div>
+      <div class="svc reveal" data-d="1"><span class="sn">02</span><h3>Selling</h3><p>Price against real comparables, position the property properly and move through buyer qualification, NOC and transfer with a clear resale plan.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20thinking%20about%20selling%20my%20property%20in%20Dubai%20or%20Abu%20Dhabi.%20Can%20we%20talk%3F">Discuss Selling</a></div>
+      <div class="svc reveal" data-d="2"><span class="sn">03</span><h3>Investing</h3><p>Compare yield after service charges, developer track record, payment plans, handover timelines and exit route before you commit.</p><a class="plink" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20discuss%20investing%20in%20Dubai%20or%20Abu%20Dhabi%20property.">Discuss Investing</a></div>
     </div>
   </div>
 </section>
@@ -244,9 +244,9 @@
     </div>
     <div class="comm-wrap">
       <p class="comm-hint">Tap an area to see Iffy’s view — 8 areas covered.</p>
-      <div class="comm-list reveal" id="commList" role="tablist" aria-label="Dubai communities"></div>
+      <div class="comm-list reveal" id="commList" role="tablist" aria-label="Dubai &amp; Abu Dhabi communities"></div>
       <noscript><p style="max-width:60ch">Iffy covers Dubai Hills, Downtown Dubai, Dubai Marina, Business Bay, Dubai Islands, Palm Jumeirah, Dubailand and Saadiyat in Abu Dhabi. Call +971 58 580 2689 for an area briefing.</p></noscript>
-      <div class="comm-right">
+      <div class="comm-right" id="commPanel" role="tabpanel">
         <div class="comm-visual reveal" data-d="1" id="commVisual">
           <div class="comm-cap">
             <h3 id="ccTitle">Dubai Hills</h3>
@@ -271,7 +271,7 @@
     <div class="s-head">
       <span class="eyebrow reveal">Property Routes</span>
       <h2 class="reveal" data-d="1">Property routes worth a closer look.</h2>
-      <p class="reveal" data-d="2">A focused look at the types of Dubai opportunities Iffy can help clients compare, from family communities to waterfront and branded addresses.</p>
+      <p class="reveal" data-d="2">A focused look at the types of Dubai and Abu Dhabi opportunities Iffy can help clients compare, from family communities to waterfront and branded addresses.</p>
     </div>
     <article class="ed reveal">
       <img loading="lazy" width="1500" height="844" src="assets/images/the-wilds.webp" alt="The Wilds by Aldar in Dubailand (render)" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
@@ -302,6 +302,13 @@
         <a href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20ask%20about%20Palm%20Jumeirah." target="_blank" rel="noopener" class="plink">Discuss this route with Iffy</a>
       </div>
     </article>
+    <article class="ed reveal">
+      <img loading="lazy" width="1600" height="1079" src="assets/images/saadiyat.webp" alt="White-sand beachfront on Saadiyat Island, Abu Dhabi" onerror="window.imgMissing?imgMissing(this):(this.alt+=' [missing]')">
+      <div class="ed-body">
+        <div><span class="dev">Aldar · Abu Dhabi</span><h3>Saadiyat Island</h3><p class="one">Cultural-district address, beachfront living. Suits end-users and long holds.</p></div>
+        <a href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27d%20like%20to%20ask%20about%20Saadiyat%20Island%20in%20Abu%20Dhabi." target="_blank" rel="noopener" class="plink">Discuss this route with Iffy</a>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -315,7 +322,7 @@
       <p class="reveal" data-d="2">These tools give a quick starting point. Iffy can turn the result into a proper area, budget or investment plan.</p>
     </div>
 
-    <div class="tool-tabs reveal" role="tablist" aria-label="Dubai property tools">
+    <div class="tool-tabs reveal" role="tablist" aria-label="Dubai &amp; Abu Dhabi property tools">
       <button type="button" class="on" data-tool="tArea" role="tab" aria-selected="true">Area Finder</button>
       <button type="button" data-tool="tBudget" role="tab" aria-selected="false">Budget Calculator</button>
       <button type="button" data-tool="tOffplan" role="tab" aria-selected="false">Off-Plan vs Ready</button>
@@ -335,7 +342,7 @@
       <div class="tq"><span class="tq-label">05 &middot; What matters most?</span>
         <div class="tq-opts" data-q="prio"><button type="button" data-v="yield">Rental yield</button><button type="button" data-v="growth">Capital growth</button><button type="button" data-v="lifestyle">Lifestyle first</button></div></div>
       <div class="tool-actions"><button type="button" class="btn btn-dark" id="areaGo">Show my areas</button></div>
-      <p class="tool-err" id="areaErr">Please answer all five questions first.</p>
+      <p class="tool-err" role="alert" id="areaErr">Please answer all five questions first.</p>
       <div class="tool-result" id="areaResult" aria-live="polite"></div>
     </div>
 
@@ -350,7 +357,7 @@
         <div class="field" id="bcPlanWrap" style="display:none"><label for="bcPlan">Initial payment on plan</label><select id="bcPlan"><option value="10">10%</option><option value="20" selected>20%</option><option value="30">30%</option></select></div>
       </div>
       <div class="tool-actions"><button type="button" class="btn btn-dark" id="bcGo">Estimate my costs</button></div>
-      <p class="tool-err" id="bcErr">Enter a property price of at least AED 100,000.</p>
+      <p class="tool-err" role="alert" id="bcErr">Enter a property price of at least AED 100,000.</p>
       <div class="tool-result" id="bcResult" aria-live="polite"></div>
     </div>
 
@@ -368,7 +375,7 @@
       <div class="tq"><span class="tq-label">05 &middot; What appeals more?</span>
         <div class="tq-opts" data-q="appeal"><button type="button" data-v="new">Newest product at launch pricing</button><button type="button" data-v="est">Established community, see what you buy</button></div></div>
       <div class="tool-actions"><button type="button" class="btn btn-dark" id="opGo">Show my result</button></div>
-      <p class="tool-err" id="opErr">Please answer all five questions first.</p>
+      <p class="tool-err" role="alert" id="opErr">Please answer all five questions first.</p>
       <div class="tool-result" id="opResult" aria-live="polite"></div>
     </div>
     <p class="tool-note" style="margin-top:1.6rem">Estimates are for guidance only. Fees, availability and costs should be confirmed at the time of purchase.</p>
@@ -379,9 +386,9 @@
 <section class="section selling" id="selling">
   <div class="wrap">
     <span class="eyebrow reveal">For Sellers</span>
-    <h2 class="reveal" data-d="1">Selling your Dubai property?</h2>
+    <h2 class="reveal" data-d="1">Selling your Dubai or Abu Dhabi property?</h2>
     <p class="reveal" data-d="2">Your property priced against real comparable transactions, positioned properly and shown to qualified buyers, with NOC and DLD transfer handled through Kamani Living.</p>
-    <a class="btn btn-light reveal" data-d="2" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20thinking%20about%20selling%20my%20Dubai%20property.%20Can%20we%20talk%3F">Speak to Iffy About Selling</a>
+    <a class="btn btn-light reveal" data-d="2" target="_blank" rel="noopener" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I%27m%20thinking%20about%20selling%20my%20property%20in%20Dubai%20or%20Abu%20Dhabi.%20Can%20we%20talk%3F">Speak to Iffy About Selling</a>
   </div>
 </section>
 
@@ -481,7 +488,7 @@
       <span class="eyebrow reveal">Contact</span>
       <h2 class="reveal" data-d="1">Start the conversation.</h2>
       <p class="reveal" data-d="2">Share a few details and I'll come back to you personally, usually the same day.</p>
-      <a href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I'd%20like%20to%20talk%20about%20Dubai%20property." class="btn btn-wa reveal" data-d="2" target="_blank" rel="noopener">
+      <a href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I'd%20like%20to%20talk%20about%20Dubai%20or%20Abu%20Dhabi%20property." class="btn btn-wa reveal" data-d="2" target="_blank" rel="noopener">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.5 14.1c-.2.7-1.3 1.3-1.9 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-2.9-1.3-4.8-4.2-5-4.4-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1.1 2.2 1.4 2.5 1.6.3.1.5.1.7-.1s.8-.9 1-1.2c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.3.1.2.1.7-.2 1.4Z"/></svg>
         Chat on WhatsApp
       </a>
@@ -507,8 +514,8 @@
         </div>
       </div>
       <div class="f-row">
-        <div class="field"><label for="fPurpose">Buying for *</label>
-          <select id="fPurpose" name="purpose" required><option value="">Select</option><option>Investment</option><option>Living</option><option>Both / not sure yet</option></select>
+        <div class="field"><label for="fPurpose">How can I help? *</label>
+          <select id="fPurpose" name="purpose" required><option value="">Select</option><option>Buying a property</option><option>Selling a property</option><option>Property investment</option><option>Relocating</option><option>Not sure / other</option></select>
         </div>
         <div class="field"><label for="fBudget">Budget range</label>
           <select id="fBudget" name="budget"><option value="">Select</option><option>Under AED 1M</option><option>AED 1M to 2M</option><option>AED 2M to 5M</option><option>AED 5M to 10M</option><option>AED 10M+</option></select>
@@ -550,7 +557,7 @@
   </div>
 </footer>
 
-<a class="float-wa" id="floatWa" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I'd%20like%20to%20talk%20about%20Dubai%20property." target="_blank" rel="noopener" aria-label="Chat with Iffy on WhatsApp">
+<a class="float-wa" id="floatWa" href="https://wa.me/971585802689?text=Hi%20Iffy%2C%20I'd%20like%20to%20talk%20about%20Dubai%20or%20Abu%20Dhabi%20property." target="_blank" rel="noopener" aria-label="Chat with Iffy on WhatsApp">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.5 14.1c-.2.7-1.3 1.3-1.9 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-2.9-1.3-4.8-4.2-5-4.4-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5s.8 1.9.8 2c.1.1.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1.1 2.2 1.4 2.5 1.6.3.1.5.1.7-.1s.8-.9 1-1.2c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.3.1.2.1.7-.2 1.4Z"/></svg>
   <span class="wa-label">WhatsApp</span>
 </a>
@@ -767,7 +774,7 @@ COMMS.forEach(function(a,i){
   var img=document.createElement('img');img.alt=a.alt||a.n;img.loading='lazy';img.decoding='async';
   img.setAttribute('data-src',a.img);img.onerror=function(){imgMissing(this,a.img);};
   commVisual.insertBefore(img,commVisual.firstChild);cImgs.push(img);
-  var b=document.createElement('button');b.className='crow';b.setAttribute('role','tab');
+  var b=document.createElement('button');b.className='crow';b.setAttribute('role','tab');b.id='crow-'+i;b.setAttribute('aria-controls','commPanel');
   b.innerHTML='<span class="an">'+a.n+'</span><span class="at">'+a.t+'</span>';
   b.addEventListener('click',function(){setComm(i);});
   commList.appendChild(b);
@@ -804,6 +811,7 @@ function setComm(i){
   cImgs.forEach(function(im,k){im.classList.toggle('show',k===i);});
   var a=COMMS[i];
   ccTitle.textContent=a.n;ccBest.textContent=a.b;ccMix.textContent=a.m;ccWhy.textContent=a.w;document.getElementById('ccView').textContent=a.v;
+  commRight.setAttribute('aria-labelledby','crow-'+i);
   placePanel(i,true);
 }
 commList.addEventListener('keydown',function(e){
@@ -895,9 +903,9 @@ document.getElementById('tslPrev').addEventListener('click',function(){rail.scro
 
 /* ---- Float WA ---- */
 var fwa=document.getElementById('floatWa');
-var toolsInView=false,footInView=false,contactInView=false,commInView=false,visInView=false,devsInView=false;
+var toolsInView=false,footInView=false,contactInView=false,commInView=false,visInView=false,devsInView=false,tslInView=false;
 var mobMQ=window.matchMedia('(max-width:860px)');
-function onWa(){fwa.classList.toggle('show',window.scrollY>window.innerHeight*0.8 && !toolsInView && !footInView && !contactInView && !(commInView&&accMQ.matches) && !((visInView||devsInView)&&mobMQ.matches));}
+function onWa(){fwa.classList.toggle('show',window.scrollY>window.innerHeight*0.8 && !toolsInView && !footInView && !contactInView && !(commInView&&accMQ.matches) && !((visInView||devsInView||tslInView)&&mobMQ.matches));}
 window.addEventListener('scroll',onWa,{passive:true});onWa();
 (function(){
 if(!('IntersectionObserver' in window))return;
@@ -920,6 +928,9 @@ if(vi)new IntersectionObserver(function(es){visInView=es[es.length-1].isIntersec
 /* and off the Property Routes cards on mobile */
 var dv=document.getElementById('developments');
 if(dv)new IntersectionObserver(function(es){devsInView=es[es.length-1].isIntersecting;onWa();},{threshold:0.05}).observe(dv);
+/* and off the review cards on mobile */
+var tsl=document.getElementById('testimonials');
+if(tsl)new IntersectionObserver(function(es){tslInView=es[es.length-1].isIntersecting;onWa();},{threshold:0.05}).observe(tsl);
 })();
 
 
@@ -970,22 +981,41 @@ function sharePDF(title,plain){
 function wirePDF(el,title,plain){var b=el.querySelector('.tr-pdf');if(b)b.addEventListener('click',function(){sharePDF(title,plain);});}
 var WA='https://wa.me/971585802689?text=';
 
-/* tabs */
-var toolTabs=document.querySelectorAll('.tool-tabs button');
+/* tabs — accessible: aria-controls/tabpanel wiring, roving tabindex, arrow keys */
+var toolTabs=[].slice.call(document.querySelectorAll('.tool-tabs button'));
 toolTabs.forEach(function(t){
-  t.addEventListener('click',function(){
-    toolTabs.forEach(function(x){x.classList.toggle('on',x===t);x.setAttribute('aria-selected',x===t);});
-    document.querySelectorAll('.tool-panel').forEach(function(p){p.classList.toggle('on',p.id===t.dataset.tool);});
-  });
+  t.id='tab-'+t.dataset.tool;
+  t.setAttribute('aria-controls',t.dataset.tool);
+  var p=document.getElementById(t.dataset.tool);
+  if(p){p.setAttribute('role','tabpanel');p.setAttribute('aria-labelledby',t.id);}
+});
+function selectTool(t,focus){
+  toolTabs.forEach(function(x){var on=x===t;x.classList.toggle('on',on);x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;});
+  document.querySelectorAll('.tool-panel').forEach(function(p){p.classList.toggle('on',p.id===t.dataset.tool);});
+  if(focus)t.focus();
+}
+toolTabs.forEach(function(t){t.addEventListener('click',function(){selectTool(t,false);});});
+selectTool(document.querySelector('.tool-tabs button.on')||toolTabs[0],false);
+document.querySelector('.tool-tabs').addEventListener('keydown',function(e){
+  var cur=toolTabs.indexOf(document.activeElement);
+  if(cur<0)return;var next=null;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')next=(cur+1)%toolTabs.length;
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp')next=(cur-1+toolTabs.length)%toolTabs.length;
+  else if(e.key==='Home')next=0;else if(e.key==='End')next=toolTabs.length-1;
+  if(next!==null){e.preventDefault();selectTool(toolTabs[next],true);}
 });
 
 /* pill question groups (shared by both quizzes) */
 function wireQuiz(panelId){
   var answers={};
-  document.querySelectorAll('#'+panelId+' .tq-opts').forEach(function(g){
+  document.querySelectorAll('#'+panelId+' .tq').forEach(function(q,qi){
+    var lab=q.querySelector('.tq-label'),g=q.querySelector('.tq-opts');
+    if(!g)return;
+    if(lab){lab.id=lab.id||panelId+'-q'+qi;g.setAttribute('role','group');g.setAttribute('aria-labelledby',lab.id);}
     g.querySelectorAll('button').forEach(function(b){
+      b.setAttribute('aria-pressed','false');
       b.addEventListener('click',function(){
-        g.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);});
+        g.querySelectorAll('button').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on);});
         answers[g.dataset.q]=b.dataset.v;
       });
     });
@@ -1123,6 +1153,9 @@ document.getElementById('opGo').addEventListener('click',function(){
    every enquiry by email — needs the Formspree/Basin form ID from Iffy/Local Foundary.
    Empty string = WhatsApp + mailto fallback only. */
 var LEAD_ENDPOINT='';
+var fCodeSel=document.getElementById('fCode'),fPhoneIn=document.getElementById('fPhone');
+function phoneHint(){var o=fCodeSel.value==='other';fPhoneIn.placeholder=o?'Full number incl. country code, e.g. +44 7700 900123':'50 000 0000';}
+fCodeSel.addEventListener('change',phoneHint);phoneHint();
 document.getElementById('leadForm').addEventListener('submit',function(e){
   e.preventDefault();var f=e.target;
   if(!f.checkValidity()){f.reportValidity();return;}
@@ -1134,7 +1167,7 @@ document.getElementById('leadForm').addEventListener('submit',function(e){
     +'Name: '+(d.name||'')+'\n'
     +'Phone: '+(code?code+' ':'')+(d.phone||'')+'\n'
     +'Email: '+(d.email||'')+'\n'
-    +'Buying for: '+(d.purpose||'')+'\n'
+    +'Enquiry: '+(d.purpose||'')+'\n'
     +'Budget: '+(d.budget||'Not specified')+'\n'
     +'Area: '+(d.area||'Open to advice')+'\n'
     +'Message: '+(d.message||'');

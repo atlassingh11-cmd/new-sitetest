@@ -541,6 +541,8 @@ figure.reveal.vis,.ed.reveal.vis,.js figure.reveal.vis,.js .ed.reveal.vis{opacit
   .float-wa{right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));width:52px;height:52px;padding:0;justify-content:center;border-radius:50%}
   .float-wa .wa-label{display:none}
   .float-wa svg{width:22px;height:22px}
+  /* scroll cue crowds the second CTA on phones - hide it on mobile */
+  .scroll-cue{display:none}
   /* solid header on mobile: hero content can never show through the logo area */
   .nav{background:rgba(10,10,10,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line-2);padding-top:env(safe-area-inset-top,0px)}
   /* hero stack sized for short visual viewports (Safari bars eat ~150px):
