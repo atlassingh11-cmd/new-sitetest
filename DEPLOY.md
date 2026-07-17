@@ -1,55 +1,22 @@
-# Deploying iffykhan.ae (Worker: new-sitetest)
+# iffykhan.ae — deployment notes (build 2026-07-17-U25 — route-card copy condensed to one line per card (homepage only, on top of U24))
 
-One-time Wrangler deploy to enable the branded 404 page
-(`not_found_handling = "404-page"` cannot be set via dashboard drag-and-drop).
+## Structure
+- `/public` — the ONLY publicly served directory (site HTML, areas guides,
+  assets, robots.txt, sitemap.xml, _headers, 404.html).
+- Repo root — project files (this file, wrangler.jsonc). Never served.
 
-## Prerequisites
-- Node.js 18+ (`node --version` — if missing, install the LTS from https://nodejs.org)
-- Access to the Cloudflare account that owns the `new-sitetest` Worker
+## How deployment works
+Push to GitHub -> the connected Cloudflare project builds and deploys
+automatically, reading `wrangler.jsonc` (assets directory: `./public`,
+branded 404 via `not_found_handling`). No manual steps.
 
-## Run these from THE SITE FOLDER
-(the folder containing index.html and wrangler.jsonc — either
-`~/Claude/code/deploy 20` on Rayy's Mac, or the extracted
-`iffykhan-build-2026-07-09-U6.zip`)
-
-```bash
-cd "/Users/rayy/Claude/code/deploy 20"     # or the extracted zip folder
-
-# 1. Confirm wrangler runs (downloads on first use)
-npx wrangler --version
-
-# 2. Log in — opens a browser; approve with the Cloudflare account
-#    that owns new-sitetest (skip if already logged in)
-npx wrangler login
-
-# 3. Deploy — uploads the site assets AND applies 404-page handling.
-#    Assets deploys are full replacements, so this also purges old
-#    orphaned files (iffy-film.mp4, superseded .jpg files).
-npx wrangler deploy
-```
-
-Expected output ends with something like:
-`Deployed new-sitetest ... https://new-sitetest.atlassingh11.workers.dev`
-
-## What this does and does not touch
-- DOES: publish the current folder as the Worker's static assets,
-  apply `not_found_handling = "404-page"`.
-- DOES NOT: change domain bindings (iffykhan.ae stays attached to the
-  Worker by name), design, copy, or any dashboard settings.
-
-## Verify after deploy
-```bash
-# must be HTTP/2 404 …
-curl -sI https://iffykhan.ae/random-test-page | head -1
-# … must print the branded page title
-curl -s  https://iffykhan.ae/random-test-page | grep -o "<title>[^<]*</title>"
-# … must include noindex
-curl -s  https://iffykhan.ae/random-test-page | grep -o 'name="robots" content="noindex"'
-# main pages still on build U6
-curl -sL https://iffykhan.ae/        | grep -o 'name="build" content="[^"]*"'
-curl -sL https://iffykhan.ae/about   | grep -o 'name="build" content="[^"]*"'
-curl -sL https://iffykhan.ae/privacy | grep -o 'name="build" content="[^"]*"'
-```
-
-Expected: `404`, `<title>Page Not Found | Iffy Khan</title>`,
-the noindex meta, and `2026-07-09-U6` on all three pages.
+## Post-deploy verification
+- View source of https://iffykhan.ae/ -> `build 2026-07-17-U25`
+- Stamps are per-page by design: homepage U25, /projects pages U24, /areas hub U22,
+  dubailand + dubai-islands guides U21, all other pages U20
+- https://iffykhan.ae/projects -> 200, projects hub (4 cards)
+- https://iffykhan.ae/projects/the-meriva-collection -> 200 (clean URLs resolve on
+  Cloudflare; they 404 on a local python http.server — that is expected locally)
+- https://iffykhan.ae/areas -> 200, hub page
+- https://iffykhan.ae/no-such-page -> 404 with branded page
+- https://iffykhan.ae/sitemap.xml -> 16 URLs
