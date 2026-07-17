@@ -4,10 +4,10 @@
 <script>document.documentElement.classList.add("js")</script>
 <meta charset="UTF-8">
 <script>(function(){var h=location.hostname;if(!/(^|\.)iffykhan\.ae$/.test(h)){var m=document.createElement('meta');m.name='robots';m.content='noindex,nofollow';document.head.appendChild(m);}})();</script>
-<meta name="build" content="2026-07-17-U26">
+<meta name="build" content="2026-07-17-U27">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About Iffy Khan | Dubai &amp; Abu Dhabi Property Specialist</title>
-<meta name="description" content="Learn about Iffy Khan, a Dubai and Abu Dhabi property advisor helping buyers, sellers and investors compare off-plan, ready homes, resale and investment opportunities with clarity.">
+<meta name="description" content="Meet Iffy Khan — a Dubai and Abu Dhabi property advisor helping buyers, sellers and investors act with clarity across off-plan, ready and resale homes.">
 <link rel="canonical" href="https://iffykhan.ae/about">
 <meta name="theme-color" content="#0B0B0B">
 <meta property="og:title" content="About Iffy Khan | Dubai &amp; Abu Dhabi Property Specialist">
@@ -31,6 +31,9 @@
 <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
 <link rel="stylesheet" href="assets/css/site.css?v=u18">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Iffy Khan","jobTitle":"Dubai & Abu Dhabi Property Advisor","worksFor":{"@type":"Organization","name":"Kamani Living"},"telephone":"+971585802689","email":"iffy@kamaniliving.com","areaServed":["Dubai","Abu Dhabi"],"knowsAbout":["Off-plan property","Dubai secondary market","Property investment","Residential resale"],"sameAs":["https://instagram.com/iffy_realestate"],"url":"https://iffykhan.ae/about"}</script>
+<style>
+@media(max-width:860px){.plink{position:relative}.plink::after{content:"";position:absolute;left:0;right:0;top:-9px;bottom:-9px}}
+</style>
 </head>
 <body class="loaded">
 <header class="nav" id="nav">
@@ -45,7 +48,7 @@
       <a href="/#communities">Areas</a>
       <a href="/#tools">Tools</a>
       <a href="/about">About</a>
-      <a href="/projects">Projects</a>
+      <a href="/projects/">Projects</a>
       <a href="/#testimonials">Reviews</a>
     </nav>
     <div class="nav-cta">
@@ -61,7 +64,7 @@
   <a href="/#communities">Areas</a>
   <a href="/#tools">Tools</a>
   <a href="/about">About Iffy</a>
-  <a href="/projects">Projects</a>
+  <a href="/projects/">Projects</a>
   <a href="/#testimonials">Reviews</a>
   <a href="/#contact">Contact</a>
   <a href="/#contact" class="btn btn-dark">Book Consultation</a>
@@ -222,10 +225,20 @@ function unlockBody(){if(!locked)return;locked=false;
  document.body.style.left='';document.body.style.right='';document.body.style.width='';
  var d=document.documentElement,prev=d.style.scrollBehavior;
  d.style.scrollBehavior='auto';window.scrollTo(0,lockY);d.style.scrollBehavior=prev;}
+var lastFocus=null;
+function trapTab(e){if(e.key!=='Tab')return;var f=menu.querySelectorAll('a,button');if(!f.length)return;var first=f[0],last=f[f.length-1];
+ if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+ else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}
+function setBg(dis){['main','footer'].forEach(function(sel){var el=document.querySelector(sel);if(!el)return;
+ try{el.inert=dis;}catch(_e){}
+ if(dis)el.setAttribute('aria-hidden','true');else el.removeAttribute('aria-hidden');});}
 function toggleMenu(force){if(!burger||!menu)return;var open=force!==undefined?force:burger.getAttribute('aria-expanded')!=='true';
  burger.setAttribute('aria-expanded',open);burger.setAttribute('aria-label',open?'Close menu':'Open menu');
  menu.classList.toggle('open',open);document.body.classList.toggle('menu-open',open);
- if(open)lockBody();else unlockBody();}
+ if(open){lockBody();lastFocus=document.activeElement;setBg(true);menu.addEventListener('keydown',trapTab);
+  var ff=menu.querySelector('a');if(ff)setTimeout(function(){ff.focus();},60);}
+ else{unlockBody();setBg(false);menu.removeEventListener('keydown',trapTab);
+  var rr=(lastFocus&&lastFocus!==document.body&&document.contains(lastFocus))?lastFocus:burger;if(rr)setTimeout(function(){rr.focus();},0);}}
 if(burger&&menu){burger.addEventListener('click',function(){toggleMenu();});
 menu.addEventListener('click',function(e){if(e.target===menu)toggleMenu(false);});
 menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){toggleMenu(false);});});
