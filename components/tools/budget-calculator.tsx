@@ -75,38 +75,150 @@ export function BudgetCalculator() {
     }
   }
 
-  const fieldClass = "min-h-12 w-full bg-stone-100 px-4 py-3 text-stone-950 outline-none focus-visible:ring-2 focus-visible:ring-stone-950";
+  const fieldClass =
+    "mt-3 min-h-14 w-full border-b border-[color-mix(in_oklch,var(--ink)_28%,transparent)] bg-transparent py-3 text-lg text-[var(--ink)] outline-none transition-colors focus-visible:border-[var(--gulf)] focus-visible:ring-0";
+
   return (
-    <form onSubmit={submit} className="space-y-8">
-      <p className="text-lg text-stone-600">Your day-one cash, estimated.</p>
-      <div className="grid gap-6 sm:grid-cols-2">
-        <label className="space-y-2 text-sm font-medium text-stone-700">Property price (AED)
-          <input className={fieldClass} value={price} onChange={(event) => setPrice(event.target.value)} type="number" inputMode="numeric" min="100000" step="10000" placeholder="e.g. 1800000" />
+    <form className="max-w-3xl" onSubmit={submit}>
+      <label className="block text-base font-medium text-[var(--ink)]">
+        Property price
+        <span className="mt-3 flex items-baseline gap-4 border-b-2 border-[var(--ink)] py-3 focus-within:border-[var(--gulf)]">
+          <span className="text-lg text-[var(--muted)]">AED</span>
+          <input
+            className="min-h-14 min-w-0 flex-1 bg-transparent text-3xl font-medium tabular-nums tracking-[-0.03em] text-[var(--ink)] outline-none placeholder:text-[color-mix(in_oklch,var(--ink)_28%,transparent)] sm:text-4xl"
+            inputMode="numeric"
+            min="100000"
+            onChange={(event) => {
+              setPrice(event.target.value);
+              setResult(null);
+              setError("");
+            }}
+            placeholder="1,800,000"
+            step="10000"
+            type="number"
+            value={price}
+          />
+        </span>
+      </label>
+
+      <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
+        <label className="text-base font-medium text-[var(--ink-soft)]">
+          Purchase type
+          <select
+            className={fieldClass}
+            onChange={(event) => {
+              setType(event.target.value as PurchaseType);
+              setResult(null);
+            }}
+            value={type}
+          >
+            <option value="ready">Ready, secondary market</option>
+            <option value="offplan">Off-plan, developer</option>
+          </select>
         </label>
-        <label className="space-y-2 text-sm font-medium text-stone-700">Purchase type
-          <select className={fieldClass} value={type} onChange={(event) => setType(event.target.value as PurchaseType)}><option value="ready">Ready, secondary market</option><option value="offplan">Off-plan, developer</option></select>
-        </label>
-        {type === "ready" ? <>
-          <label className="space-y-2 text-sm font-medium text-stone-700">How are you buying?
-            <select className={fieldClass} value={funding} onChange={(event) => setFunding(event.target.value as FundingType)}><option value="mortgage">With a mortgage</option><option value="cash">Cash</option></select>
+
+        {type === "ready" ? (
+          <>
+            <label className="text-base font-medium text-[var(--ink-soft)]">
+              How are you buying?
+              <select
+                className={fieldClass}
+                onChange={(event) => {
+                  setFunding(event.target.value as FundingType);
+                  setResult(null);
+                }}
+                value={funding}
+              >
+                <option value="mortgage">With a mortgage</option>
+                <option value="cash">Cash</option>
+              </select>
+            </label>
+            <label className="text-base font-medium text-[var(--ink-soft)]">
+              Purpose
+              <select
+                className={fieldClass}
+                onChange={(event) => {
+                  setPurpose(event.target.value as PurchasePurpose);
+                  setResult(null);
+                }}
+                value={purpose}
+              >
+                <option value="first">First home, to live</option>
+                <option value="invest">Investment or second property</option>
+              </select>
+            </label>
+          </>
+        ) : (
+          <label className="text-base font-medium text-[var(--ink-soft)]">
+            Initial payment on plan
+            <select
+              className={fieldClass}
+              onChange={(event) => {
+                setInitialPayment(Number(event.target.value) as InitialPayment);
+                setResult(null);
+              }}
+              value={initialPayment}
+            >
+              <option value="10">10%</option>
+              <option value="20">20%</option>
+              <option value="30">30%</option>
+            </select>
           </label>
-          <label className="space-y-2 text-sm font-medium text-stone-700">Purpose
-            <select className={fieldClass} value={purpose} onChange={(event) => setPurpose(event.target.value as PurchasePurpose)}><option value="first">First home, to live</option><option value="invest">Investment or second property</option></select>
-          </label>
-        </> : <label className="space-y-2 text-sm font-medium text-stone-700">Initial payment on plan
-          <select className={fieldClass} value={initialPayment} onChange={(event) => setInitialPayment(Number(event.target.value) as InitialPayment)}><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option></select>
-        </label>}
+        )}
       </div>
-      <button type="submit" className="min-h-11 rounded-full bg-stone-950 px-6 py-3 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">Estimate my costs</button>
-      {error ? <p role="alert" className="text-sm text-red-700">{error}</p> : null}
-      {result ? <div aria-live="polite" className="space-y-6 bg-stone-100 p-6 sm:p-8">
-        <h3 className="text-2xl font-medium text-stone-950">Estimated day-one cash · {result.heading}</h3>
-        <dl className="space-y-3">{result.rows.map((row) => <div key={row.label} className="flex items-start justify-between gap-6 text-sm"><dt className="text-stone-600">{row.label}</dt><dd className="shrink-0 font-medium tabular-nums text-stone-950">{formatAED(row.amount)}</dd></div>)}
-          <div className="flex items-start justify-between gap-6 pt-3 text-base font-medium"><dt>Estimated total upfront</dt><dd className="shrink-0 tabular-nums">{formatAED(result.total)}</dd></div>
-        </dl>
-        <p className="text-sm text-stone-500">Indicative only, based on published fees and standard UAE Central Bank rules. Confirm fees and government charges at the time of purchase. This is not financial advice.</p>
-        <Link href="/?intent=buying#consultation" className="inline-flex min-h-11 items-center rounded-full bg-stone-950 px-5 py-3 text-sm font-medium text-white">Ask Iffy to review this budget</Link>
-      </div> : null}
+
+      <button
+        className="mt-10 min-h-12 rounded-full bg-[var(--ink)] px-6 py-3 text-base font-medium text-[var(--limestone)] transition-colors hover:bg-[var(--gulf)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--gulf)]"
+        type="submit"
+      >
+        Estimate the upfront cash
+      </button>
+      {error ? (
+        <p className="mt-5 text-base font-medium text-[var(--danger)]" role="alert">
+          {error}
+        </p>
+      ) : null}
+
+      {result ? (
+        <section
+          aria-live="polite"
+          className="mt-14 bg-[var(--ink)] px-6 py-10 text-[var(--limestone)] sm:px-10 sm:py-12"
+        >
+          <h3 className="max-w-2xl text-3xl font-medium tracking-[-0.035em] sm:text-4xl">
+            Estimated upfront cash
+          </h3>
+          <p className="mt-3 text-lg text-[var(--limestone-deep)]">
+            {result.heading}
+          </p>
+          <dl className="mt-8 border-t border-[color-mix(in_oklch,var(--limestone)_22%,transparent)]">
+            {result.rows.map((row) => (
+              <div
+                className="flex items-start justify-between gap-6 border-b border-[color-mix(in_oklch,var(--limestone)_22%,transparent)] py-4 text-base"
+                key={row.label}
+              >
+                <dt className="text-[var(--limestone-deep)]">{row.label}</dt>
+                <dd className="shrink-0 font-medium tabular-nums">
+                  {formatAED(row.amount)}
+                </dd>
+              </div>
+            ))}
+            <div className="flex items-start justify-between gap-6 py-6 text-lg font-medium">
+              <dt>Estimated total upfront</dt>
+              <dd className="shrink-0 tabular-nums">{formatAED(result.total)}</dd>
+            </div>
+          </dl>
+          <p className="max-w-2xl text-base leading-7 text-[var(--limestone-deep)]">
+            Indicative only. Confirm financing, professional fees and government
+            charges for the exact property before you act.
+          </p>
+          <Link
+            className="mt-7 inline-flex min-h-12 items-center rounded-full bg-[var(--sea-glass)] px-6 py-3 text-base font-medium text-[var(--ink)] transition-colors hover:bg-[var(--limestone)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--sea-glass)]"
+            href="/?intent=buying#consultation"
+          >
+            Ask Iffy to check the budget
+          </Link>
+        </section>
+      ) : null}
     </form>
   );
 }

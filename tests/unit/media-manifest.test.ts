@@ -53,6 +53,15 @@ describe("media shipping allowlist", () => {
     );
   });
 
+  it("records the hero video as a post-LCP enhancement with its own poster", () => {
+    const heroVideo = mediaManifest.find(
+      (asset) => asset.publicPath === "/media/iffy-hero.mp4",
+    );
+
+    expect(heroVideo?.loading).toBe("after-lcp");
+    expect(heroVideo?.fallback).toBe("/media/iffy-hero-poster.webp");
+  });
+
   it("excludes stored duplicate formats and deferred Palm sequences", () => {
     const paths = mediaManifest.map((asset) => asset.publicPath);
     expect(paths).not.toContain("/media/hero-downtown.jpg");

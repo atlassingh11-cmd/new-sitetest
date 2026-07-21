@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { motion, useReducedMotion } from "motion/react";
 
 import {
   addDays,
@@ -32,7 +33,6 @@ export interface ConsultationCalendarProps {
   className?: string;
 }
 
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const MONTH_FORMATTER = new Intl.DateTimeFormat("en-GB", {
   month: "long",
   year: "numeric",
@@ -43,6 +43,10 @@ const LONG_DATE_FORMATTER = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
   month: "long",
   year: "numeric",
+  timeZone: "UTC",
+});
+const SHORT_WEEKDAY_FORMATTER = new Intl.DateTimeFormat("en-GB", {
+  weekday: "short",
   timeZone: "UTC",
 });
 const CLOCK_NEUTRAL_MONTH = new Date(Date.UTC(2000, 0, 1, 12));
@@ -94,6 +98,10 @@ function formatLongDate(value: string): string {
   return LONG_DATE_FORMATTER.format(isoToDate(value));
 }
 
+function formatShortWeekday(value: string): string {
+  return SHORT_WEEKDAY_FORMATTER.format(isoToDate(value));
+}
+
 export function focusConsultationDateControl(
   container: ParentNode | null,
 ): boolean {
@@ -135,21 +143,37 @@ export const ConsultationCalendar = React.forwardRef<
   const internalErrorId = React.useId();
   const selectedStatusId = React.useId();
   const describedBy = error ? errorId ?? internalErrorId : undefined;
+  const prefersReducedMotion = useReducedMotion();
   const [bounds, setBounds] = React.useState<PreferenceBounds | null>(null);
+  const [currentMonth, setCurrentMonth] = React.useState<Date | null>(null);
+  const [focusedDate, setFocusedDate] = React.useState<string | null>(null);
+  const previousSelectedDateRef = React.useRef<string | undefined>(undefined);
+  const shouldFocusRef = React.useRef(false);
+  const hasPositionedRailRef = React.useRef(false);
+  const railRef = React.useRef<HTMLDivElement>(null);
+  const dayRefs = React.useRef(new Map<string, HTMLButtonElement>());
+
   const min = bounds?.min ?? "";
   const max = bounds?.max ?? "";
   const selectedDate = bounds && isWithinBounds(value.date, bounds)
     ? value.date
     : undefined;
   const selectedWindow = selectedDate ? value.window : undefined;
+  const proposedFocusedDate = focusedDate ?? selectedDate ?? min;
+  const clampedFocusedDate = bounds
+    ? clampIso(proposedFocusedDate, min, max)
+    : "";
 
-  const [currentMonth, setCurrentMonth] = React.useState<Date | null>(null);
-  const [focusedDate, setFocusedDate] = React.useState<string | null>(null);
-  const [previousSelectedDate, setPreviousSelectedDate] =
-    React.useState<string | undefined>(undefined);
-  const [isNarrow, setIsNarrow] = React.useState<boolean | null>(null);
-  const shouldFocusRef = React.useRef(false);
-  const dayRefs = React.useRef(new Map<string, HTMLButtonElement>());
+  const candidateMonth = bounds
+    ? currentMonth ?? monthStart(clampedFocusedDate)
+    : CLOCK_NEUTRAL_MONTH;
+  const candidateMonthIso = dateToIso(candidateMonth);
+  const minMonthIso = bounds ? dateToIso(monthStart(min)) : "";
+  const maxMonthIso = bounds ? dateToIso(monthStart(max)) : "";
+  const displayedMonth =
+    bounds && (candidateMonthIso < minMonthIso || candidateMonthIso > maxMonthIso)
+      ? monthStart(clampedFocusedDate)
+      : candidateMonth;
 
   React.useEffect(() => {
     let midnightTimer = 0;
@@ -185,105 +209,104 @@ export const ConsultationCalendar = React.forwardRef<
   }, []);
 
   React.useEffect(() => {
-    if (typeof window.matchMedia !== "function") return;
-    const query = window.matchMedia("(max-width: 359px)");
-    const update = () => setIsNarrow(query.matches);
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
+    if (!bounds) return;
 
-  const selectionChanged = Boolean(
-    bounds && selectedDate !== previousSelectedDate,
-  );
-  if (selectionChanged) {
-    setPreviousSelectedDate(selectedDate);
-  }
+    const selectedDateChanged =
+      selectedDate !== previousSelectedDateRef.current;
+    previousSelectedDateRef.current = selectedDate;
+    const nextFocusedDate = clampIso(
+      selectedDateChanged && selectedDate
+        ? selectedDate
+        : focusedDate ?? selectedDate ?? bounds.min,
+      bounds.min,
+      bounds.max,
+    );
 
-  const proposedFocusedDate =
-    selectionChanged && selectedDate
-      ? selectedDate
-      : focusedDate ?? selectedDate ?? min;
-  const clampedFocusedDate = bounds
-    ? clampIso(proposedFocusedDate, min, max)
-    : "";
-  const focusWasClamped = Boolean(
-    bounds && focusedDate && focusedDate !== clampedFocusedDate,
-  );
-  const displayedMonth = bounds
-    ? focusWasClamped || !currentMonth
-      ? monthStart(clampedFocusedDate)
-      : currentMonth
-    : CLOCK_NEUTRAL_MONTH;
-
-  if (
-    bounds &&
-    clampedFocusedDate &&
-    (focusedDate !== clampedFocusedDate ||
-      !currentMonth ||
-      (selectionChanged && Boolean(selectedDate)))
-  ) {
-    if (focusedDate !== clampedFocusedDate) {
-      setFocusedDate(clampedFocusedDate);
-    }
-    if (focusWasClamped || !currentMonth || selectionChanged) {
-      setCurrentMonth(monthStart(clampedFocusedDate));
-    }
-  }
+    setFocusedDate((current) =>
+      current === nextFocusedDate ? current : nextFocusedDate,
+    );
+    setCurrentMonth((current) => {
+      const nextMonth =
+        selectedDateChanged && selectedDate
+          ? monthStart(selectedDate)
+          : current ?? monthStart(nextFocusedDate);
+      const nextMonthIso = dateToIso(nextMonth);
+      const lowerMonth = dateToIso(monthStart(bounds.min));
+      const upperMonth = dateToIso(monthStart(bounds.max));
+      if (nextMonthIso < lowerMonth || nextMonthIso > upperMonth) {
+        return monthStart(nextFocusedDate);
+      }
+      return nextMonth;
+    });
+  }, [bounds, focusedDate, selectedDate]);
 
   React.useEffect(() => {
-    if (!shouldFocusRef.current || isNarrow) return;
+    if (!bounds || !clampedFocusedDate) return;
     const control = dayRefs.current.get(clampedFocusedDate);
-    if (control) {
+    const rail = railRef.current;
+    if (!control || !rail) return;
+
+    if (!hasPositionedRailRef.current || shouldFocusRef.current) {
+      const railRect = rail.getBoundingClientRect();
+      const controlRect = control.getBoundingClientRect();
+      const nextLeft =
+        rail.scrollLeft +
+        controlRect.left -
+        railRect.left -
+        (rail.clientWidth - controlRect.width) / 2;
+      const left = Math.max(0, nextLeft);
+      if (typeof rail.scrollTo === "function") {
+        rail.scrollTo({ left, behavior: "auto" });
+      } else {
+        rail.scrollLeft = left;
+      }
+      hasPositionedRailRef.current = true;
+    }
+
+    if (shouldFocusRef.current) {
       shouldFocusRef.current = false;
       control.focus({ preventScroll: true });
     }
-  }, [clampedFocusedDate, currentMonth, isNarrow]);
+  }, [bounds, clampedFocusedDate, currentMonth]);
 
-  const {
-    currentYear,
-    currentMonthIndex,
-    currentMonthLabel,
-    monthDates,
-    leadingCells,
-  } = React.useMemo(() => {
-    const year = displayedMonth.getUTCFullYear();
-    const monthIndex = displayedMonth.getUTCMonth();
-    const firstWeekday =
-      (new Date(Date.UTC(year, monthIndex, 1, 12)).getUTCDay() + 6) % 7;
-    const monthDayCount = daysInMonth(year, monthIndex);
+  const { currentYear, currentMonthIndex, currentMonthLabel, monthDates } =
+    React.useMemo(() => {
+      const year = displayedMonth.getUTCFullYear();
+      const monthIndex = displayedMonth.getUTCMonth();
+      const monthDayCount = daysInMonth(year, monthIndex);
 
-    return {
-      currentYear: year,
-      currentMonthIndex: monthIndex,
-      currentMonthLabel: formatMonth(displayedMonth),
-      monthDates: Array.from({ length: monthDayCount }, (_, index) =>
-        dateToIso(new Date(Date.UTC(year, monthIndex, index + 1, 12))),
-      ),
-      leadingCells: Array.from(
-        { length: firstWeekday },
-        (_, index) => index,
-      ),
-    };
-  }, [displayedMonth]);
+      return {
+        currentYear: year,
+        currentMonthIndex: monthIndex,
+        currentMonthLabel: formatMonth(displayedMonth),
+        monthDates: Array.from({ length: monthDayCount }, (_, index) =>
+          dateToIso(new Date(Date.UTC(year, monthIndex, index + 1, 12))),
+        ),
+      };
+    }, [displayedMonth]);
 
   const moveFocus = React.useCallback(
     (nextDate: string) => {
+      if (!bounds) return;
       const clamped = clampIso(nextDate, min, max);
       shouldFocusRef.current = true;
       setFocusedDate(clamped);
       setCurrentMonth(monthStart(clamped));
     },
-    [max, min],
+    [bounds, max, min],
   );
 
   const moveByMonth = React.useCallback(
     (amount: number) => {
+      if (!clampedFocusedDate) return;
       const focused = isoToDate(clampedFocusedDate);
-      const targetYear = focused.getUTCFullYear();
-      const targetMonth = focused.getUTCMonth() + amount;
       const targetMonthStart = new Date(
-        Date.UTC(targetYear, targetMonth, 1, 12),
+        Date.UTC(
+          focused.getUTCFullYear(),
+          focused.getUTCMonth() + amount,
+          1,
+          12,
+        ),
       );
       const day = Math.min(
         focused.getUTCDate(),
@@ -332,7 +355,6 @@ export const ConsultationCalendar = React.forwardRef<
       default:
         handled = false;
     }
-
     if (handled) event.preventDefault();
   };
 
@@ -346,78 +368,74 @@ export const ConsultationCalendar = React.forwardRef<
   };
 
   const currentMonthFirst = dateToIso(displayedMonth);
-  const previousMonthAllowed =
-    bounds ? currentMonthFirst > dateToIso(monthStart(min)) : false;
+  const previousMonthAllowed = bounds
+    ? currentMonthFirst > dateToIso(monthStart(min))
+    : false;
   const nextMonth = new Date(
     Date.UTC(currentYear, currentMonthIndex + 1, 1, 12),
   );
   const nextMonthAllowed = bounds ? dateToIso(nextMonth) <= max : false;
-  const useNativeDateInput = !bounds || isNarrow !== false;
+  const useNativeDateInput = !bounds;
 
   return (
     <div
       aria-describedby={describedBy}
       aria-labelledby={labelledBy ?? titleId}
       className={cn(
-        "w-full max-w-[26rem] text-[#102125] forced-colors:text-[CanvasText]",
+        "w-full max-w-[22.5rem] overflow-hidden rounded-3xl border border-white/10 bg-black/20 p-4 text-white shadow-2xl backdrop-blur-xl sm:p-5 forced-colors:border forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]",
         className,
       )}
       ref={forwardedRef}
       role="group"
     >
-      <div className="flex items-end justify-between gap-4">
+      {useNativeDateInput ? (
         <div>
-          <h3 className="text-lg font-semibold tracking-[-0.02em]" id={titleId}>
+          <h3 className="text-sm font-semibold text-[color-mix(in_oklch,var(--limestone)_74%,transparent)]" id={titleId}>
             Preferred day
           </h3>
-          <p className="mt-1 text-sm text-[#496066]">
-            Choose a day in Dubai, or continue without one.
-          </p>
-        </div>
-
-        {selectedDate ? (
-          <button
-            className="min-h-11 shrink-0 rounded-full px-3 text-sm font-medium underline decoration-[#8caeb4] underline-offset-4 outline-none hover:decoration-current focus-visible:ring-2 focus-visible:ring-[#102125] forced-colors:border"
-            onClick={() => onChange({})}
-            type="button"
-          >
-            Clear day
-          </button>
-        ) : null}
-      </div>
-
-      {useNativeDateInput ? (
-        <div className="mt-5">
           <label className="sr-only" htmlFor={`${titleId}-native`}>
             Preferred day in Dubai
           </label>
           <input
             aria-describedby={describedBy}
             aria-invalid={error ? "true" : undefined}
-            className="min-h-12 w-full rounded-xl bg-[#eef1ed] px-3 text-base outline-none ring-1 ring-[#71858a] focus-visible:ring-2 focus-visible:ring-[#102125] forced-colors:border"
+            className="mt-4 min-h-14 w-full rounded-xl bg-[color-mix(in_oklch,var(--paper)_12%,transparent)] px-4 text-base text-[var(--limestone)] outline-none ring-1 ring-[color-mix(in_oklch,var(--paper)_18%,transparent)] focus-visible:ring-2 focus-visible:ring-[var(--sea-glass)] forced-colors:border"
             data-date-input=""
             id={`${titleId}-native`}
-            max={bounds?.max}
-            min={bounds?.min}
             onChange={(event) => chooseDate(event.currentTarget.value)}
             type="date"
-            value={bounds ? selectedDate ?? "" : value.date ?? ""}
+            value={value.date ?? ""}
           />
         </div>
       ) : (
-        <div className="mt-5">
-          <div className="flex items-center justify-between gap-3">
-            <p
-              aria-live="polite"
-              className="text-xl font-semibold tracking-[-0.025em]"
-              id={monthId}
-            >
-              {currentMonthLabel}
-            </p>
-            <div className="flex gap-1">
+        <>
+          <div className="flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <h3
+                className="text-sm font-semibold text-[color-mix(in_oklch,var(--limestone)_68%,transparent)]"
+                id={titleId}
+              >
+                Preferred day
+              </h3>
+              <motion.p
+                animate={{ opacity: 1, y: 0 }}
+                aria-live="polite"
+                className="mt-1 text-[clamp(1.9rem,8vw,2.65rem)] font-semibold leading-none tracking-[-0.055em]"
+                id={monthId}
+                initial={
+                  prefersReducedMotion ? false : { opacity: 0.72, y: -6 }
+                }
+                key={currentMonthLabel}
+                transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {currentMonthLabel}
+              </motion.p>
+            </div>
+
+            <div className="flex shrink-0 gap-1.5">
               <button
                 aria-label="Show previous month"
-                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full bg-[#e7ebe7] outline-none hover:bg-[#dce3df] focus-visible:ring-2 focus-visible:ring-[#102125] disabled:opacity-35 forced-colors:border"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full bg-[color-mix(in_oklch,var(--paper)_7%,transparent)] text-[color-mix(in_oklch,var(--limestone)_76%,transparent)] outline-none transition-colors hover:bg-[color-mix(in_oklch,var(--paper)_13%,transparent)] hover:text-[var(--limestone)] focus-visible:ring-2 focus-visible:ring-[var(--sea-glass)] disabled:cursor-not-allowed disabled:opacity-30 forced-colors:border"
                 disabled={!previousMonthAllowed}
                 onClick={() => moveByMonth(-1)}
                 type="button"
@@ -426,7 +444,7 @@ export const ConsultationCalendar = React.forwardRef<
               </button>
               <button
                 aria-label="Show next month"
-                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full bg-[#e7ebe7] outline-none hover:bg-[#dce3df] focus-visible:ring-2 focus-visible:ring-[#102125] disabled:opacity-35 forced-colors:border"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full bg-[color-mix(in_oklch,var(--paper)_7%,transparent)] text-[color-mix(in_oklch,var(--limestone)_76%,transparent)] outline-none transition-colors hover:bg-[color-mix(in_oklch,var(--paper)_13%,transparent)] hover:text-[var(--limestone)] focus-visible:ring-2 focus-visible:ring-[var(--sea-glass)] disabled:cursor-not-allowed disabled:opacity-30 forced-colors:border"
                 disabled={!nextMonthAllowed}
                 onClick={() => moveByMonth(1)}
                 type="button"
@@ -436,66 +454,86 @@ export const ConsultationCalendar = React.forwardRef<
             </div>
           </div>
 
+          <div className="mt-4 flex min-h-11 items-center justify-between gap-4 text-sm">
+            <p className="leading-5 text-[color-mix(in_oklch,var(--limestone)_66%,transparent)]">
+              {selectedDate
+                ? formatLongDate(selectedDate)
+                : "Choose a day, then a time. Dubai time."}
+            </p>
+            {selectedDate ? (
+              <button
+                aria-label="Clear day"
+                className="min-h-11 shrink-0 px-1 font-semibold text-[var(--limestone)] underline decoration-[var(--sea-glass)] decoration-2 underline-offset-4 outline-none hover:decoration-current focus-visible:ring-2 focus-visible:ring-[var(--sea-glass)]"
+                onClick={() => onChange({})}
+                type="button"
+              >
+                Clear
+              </button>
+            ) : null}
+          </div>
+
           <div
             aria-describedby={
-              [selectedStatusId, describedBy].filter(Boolean).join(" ") || undefined
+              [selectedStatusId, describedBy].filter(Boolean).join(" ") ||
+              undefined
             }
-            aria-labelledby={monthId}
-            className="mt-3 grid grid-cols-7 gap-y-1"
+            aria-labelledby={`${titleId} ${monthId}`}
+            className="-mx-4 mt-3 snap-x snap-mandatory overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-5 sm:px-5"
+            ref={railRef}
             role="grid"
           >
-            {WEEKDAYS.map((weekday) => (
-              <div
-                aria-hidden="true"
-                className="flex h-8 items-center justify-center text-xs font-semibold uppercase tracking-[0.08em] text-[#61747a]"
-                key={weekday}
-                role="columnheader"
-              >
-                {weekday}
-              </div>
-            ))}
-            {leadingCells.map((cell) => (
-              <span aria-hidden="true" key={`empty-${cell}`} />
-            ))}
-            {monthDates.map((date) => {
-              const isAvailable = date >= min && date <= max;
-              const isSelected = date === selectedDate;
-              const isFocused = date === clampedFocusedDate;
+            <div className="flex min-w-max gap-2" role="row">
+              {monthDates.map((date) => {
+                const dateValue = isoToDate(date);
+                const isSelected = date === selectedDate;
+                const isFocused = date === clampedFocusedDate;
+                const isAvailable = Boolean(
+                  bounds && date >= min && date <= max,
+                );
 
-              return (
-                <div
-                  aria-selected={isSelected}
-                  className="flex items-center justify-center"
-                  key={date}
-                  role="gridcell"
-                >
-                  <button
-                    aria-label={formatLongDate(date)}
-                    className={cn(
-                      "inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[#102125] focus-visible:ring-offset-2 disabled:text-[#9ba7a4] forced-colors:border",
-                      isSelected
-                        ? "bg-[#123e48] text-white"
-                        : "hover:bg-[#e2e9e6]",
-                    )}
-                    data-date-input={isFocused ? "" : undefined}
-                    disabled={!isAvailable}
-                    onClick={() => chooseDate(date)}
-                    onFocus={() => setFocusedDate(date)}
-                    onKeyDown={handleDayKeyDown}
-                    ref={(node) => {
-                      if (node) dayRefs.current.set(date, node);
-                      else dayRefs.current.delete(date);
-                    }}
-                    tabIndex={isFocused && isAvailable ? 0 : -1}
-                    type="button"
+                return (
+                  <div
+                    aria-selected={isSelected}
+                    className="flex w-11 snap-center flex-col items-center gap-1.5"
+                    key={date}
+                    role="gridcell"
                   >
-                    {Number(date.slice(-2))}
-                  </button>
-                </div>
-              );
-            })}
+                    <span
+                      aria-hidden="true"
+                      className="text-[0.66rem] font-semibold text-[color-mix(in_oklch,var(--limestone)_48%,transparent)]"
+                    >
+                      {formatShortWeekday(date)}
+                    </span>
+                    <button
+                      aria-label={formatLongDate(date)}
+                      className={cn(
+                        "relative grid min-h-11 min-w-11 place-items-center rounded-full text-sm font-semibold tabular-nums outline-none transition-[background-color,color,opacity] duration-200 focus-visible:ring-2 focus-visible:ring-[var(--sea-glass)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ink)] forced-colors:border",
+                        isSelected
+                          ? "bg-[var(--limestone)] text-[var(--ink)] shadow-lg"
+                          : "text-[var(--limestone)] hover:bg-[color-mix(in_oklch,var(--paper)_12%,transparent)]",
+                        !isAvailable &&
+                          "cursor-not-allowed text-[color-mix(in_oklch,var(--limestone)_22%,transparent)] opacity-60",
+                      )}
+                      data-date-input={isFocused ? "" : undefined}
+                      disabled={!isAvailable}
+                      onClick={() => chooseDate(date)}
+                      onFocus={() => setFocusedDate(date)}
+                      onKeyDown={handleDayKeyDown}
+                      ref={(node) => {
+                        if (node) dayRefs.current.set(date, node);
+                        else dayRefs.current.delete(date);
+                      }}
+                      tabIndex={isFocused ? 0 : -1}
+                      type="button"
+                    >
+                      {dateValue.getUTCDate()}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       <p aria-live="polite" className="sr-only" id={selectedStatusId}>
@@ -504,43 +542,57 @@ export const ConsultationCalendar = React.forwardRef<
           : "No preferred day selected"}
       </p>
 
-      <fieldset className="mt-6" disabled={!selectedDate}>
-        <legend className="text-sm font-semibold">Dubai time preference</legend>
-        <p className="mt-1 text-sm text-[#61747a]">
-          These are broad windows. Iffy will agree the exact time with you.
-        </p>
-        <div className="mt-3 grid gap-2 sm:grid-cols-3">
-          {CONSULTATION_TIME_WINDOWS.map((option) => (
-            <label
-              className={cn(
-                "flex min-h-12 cursor-pointer items-center rounded-xl bg-[#eef1ed] px-3 text-sm font-medium outline-none ring-1 ring-transparent has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[#102125] forced-colors:border",
-                !selectedDate && "cursor-not-allowed opacity-45",
-                selectedWindow === option.value && "bg-[#d9e7e5] ring-[#557c83]",
-              )}
-              key={option.value}
-            >
-              <input
-                checked={selectedWindow === option.value}
-                className="mr-2 h-4 w-4 accent-[#123e48]"
-                disabled={!selectedDate}
-                name={`${titleId}-window`}
-                onChange={() => {
-                  if (selectedDate) {
-                    onChange({ date: selectedDate, window: option.value });
-                  }
-                }}
-                type="radio"
-                value={option.value}
-              />
-              {option.label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      {selectedDate ? (
+        <fieldset className="mt-4 border-t border-[color-mix(in_oklch,var(--paper)_13%,transparent)] pt-4">
+          <legend className="text-sm font-semibold">Preferred time</legend>
+          <p className="mt-1 text-xs leading-5 text-[color-mix(in_oklch,var(--limestone)_58%,transparent)]">
+            Iffy will confirm the exact time with you.
+          </p>
+          <div className="mt-3 border-t border-[color-mix(in_oklch,var(--paper)_14%,transparent)]">
+            {CONSULTATION_TIME_WINDOWS.map((option) => {
+              const selected = selectedWindow === option.value;
+
+              return (
+                <label
+                  className={cn(
+                    "relative flex min-h-12 cursor-pointer items-center justify-between border-b border-[color-mix(in_oklch,var(--paper)_14%,transparent)] px-1 text-left outline-none transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-inset has-[:focus-visible]:ring-[var(--sea-glass)]",
+                    selected
+                      ? "bg-[var(--limestone)] text-[var(--ink)]"
+                      : "text-[var(--limestone)] hover:bg-[color-mix(in_oklch,var(--paper)_10%,transparent)]",
+                  )}
+                  key={option.value}
+                >
+                  <input
+                    aria-label={option.label}
+                    checked={selected}
+                    className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+                    name={`${titleId}-window`}
+                    onChange={() =>
+                      onChange({ date: selectedDate, window: option.value })
+                    }
+                    type="radio"
+                    value={option.value}
+                  />
+                  <span aria-hidden="true" className="pointer-events-none text-sm font-semibold leading-5">
+                    {option.label}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "pointer-events-none size-2 rounded-full ring-1 ring-current transition-colors",
+                      selected && "bg-[var(--ink)]",
+                    )}
+                  />
+                </label>
+              );
+            })}
+          </div>
+        </fieldset>
+      ) : null}
 
       {error ? (
         <p
-          className="mt-3 text-sm font-semibold text-[#9b2c2c]"
+          className="mt-4 rounded-lg bg-[color-mix(in_oklch,var(--danger)_22%,transparent)] px-3 py-2 text-sm font-semibold text-[var(--limestone)] ring-1 ring-[color-mix(in_oklch,var(--danger)_58%,transparent)]"
           id={describedBy}
           role="alert"
         >

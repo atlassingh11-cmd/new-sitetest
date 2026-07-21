@@ -20,8 +20,8 @@ export const site = {
 } as const;
 
 export const navigation = [
-  { label: "Buying", href: "/?intent=buying#services" },
-  { label: "Selling", href: "/?intent=selling#services" },
+  { label: "Buying", href: "/?intent=buying#buying" },
+  { label: "Selling", href: "/?intent=selling#selling" },
   { label: "Areas", href: "/areas" },
   { label: "Tools", href: "/#tools" },
   { label: "About", href: "/about" },

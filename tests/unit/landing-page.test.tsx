@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { AdviceRoutes } from "@/components/landing/advice-routes";
 import { ClientProof } from "@/components/landing/client-proof";
-import { TrustLedger } from "@/components/landing/trust-ledger";
+import { EditorialInspection } from "@/components/landing/editorial-inspection";
 
 vi.mock("next/image", () => ({
   default: (props: ImgHTMLAttributes<HTMLImageElement> & { fill?: boolean; priority?: boolean }) => {
@@ -20,26 +20,33 @@ vi.mock("next/image", () => ({
 }));
 
 describe("landing narrative", () => {
-  it("puts the verified credentials and buyer and seller routes in the static tree", () => {
-    render(
-      <>
-        <TrustLedger />
-        <AdviceRoutes />
-      </>,
-    );
+  it("puts the buyer and seller routes in the static tree", () => {
+    render(<AdviceRoutes />);
 
-    expect(screen.getByText("Licence 91889")).toBeInTheDocument();
-    expect(screen.getByText("ORN 1247700")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Know what you are buying into." })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Sell with the facts on your side." })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /Buying advice/ })).toHaveAttribute("href", "/?intent=buying#consultation");
-    expect(screen.getByRole("link", { name: /Selling advice/ })).toHaveAttribute("href", "/?intent=selling#consultation");
+    expect(screen.getByRole("heading", { name: "Buy" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Sell" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Find a home to live in/ })).toHaveAttribute("href", "/?intent=buying#consultation");
+    expect(screen.getByRole("link", { name: /Build an investment brief/ })).toHaveAttribute("href", "/?intent=investing#consultation");
+    expect(screen.getByRole("link", { name: /Set the right asking price/ })).toHaveAttribute("href", "/?intent=selling#consultation");
+    expect(screen.getAllByRole("link")).toHaveLength(6);
   });
 
   it("uses only the existing attributed review excerpt", () => {
-    render(<ClientProof />);
+    const { container } = render(<ClientProof />);
 
     expect(screen.getByText("Oisin W, Home Buyer, Dubai")).toBeInTheDocument();
-    expect(screen.getByText(/I never felt any stress or pressure/)).toBeInTheDocument();
+    expect(container.querySelector("blockquote")).toHaveTextContent(
+      /I never felt any stress or pressure/,
+    );
+  });
+
+  it("uses a single static inspection image between proof and tools", () => {
+    const { container } = render(<EditorialInspection />);
+
+    const image = screen.getByRole("img", {
+      name: /Keys, a floor plan, notebook and laser measure/,
+    });
+    expect(image).toHaveAttribute("src", "/media/inspection-editorial.webp");
+    expect(container.querySelector("[data-inspection-sticky]")).toContainElement(image);
   });
 });

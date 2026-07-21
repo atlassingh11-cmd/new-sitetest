@@ -26,7 +26,7 @@ export function AdvisorFilm() {
     try {
       if (!activated) {
         setActivated(true);
-        setPlaybackStatus("Loading the Meet Iffy film.");
+        setPlaybackStatus("Loading the film.");
         video.src = "/media/iffy-film.mp4";
       }
 
@@ -41,7 +41,7 @@ export function AdvisorFilm() {
       playbackErrorRef.current = true;
       setPlaying(false);
       setPlaybackStatus(
-        "The film could not play. Try again, or read the transcript below.",
+        "The film could not play. Try again.",
       );
     } finally {
       pendingRef.current = false;
@@ -50,20 +50,20 @@ export function AdvisorFilm() {
   }
 
   return (
-    <div className="w-full max-w-[28rem]">
-      <div className="relative aspect-[9/16] w-full overflow-hidden rounded-[1.15rem] bg-[#0a1514] shadow-[0_32px_90px_rgba(14,39,35,0.2)]">
+    <div className="advisor-film w-full max-w-[28rem]">
+      <div className="advisor-film__frame relative aspect-[9/16] w-full overflow-hidden rounded-[1.15rem] bg-[#0a1514] shadow-[0_32px_90px_rgba(14,39,35,0.2)]">
         {!activated ? (
           <Image
             src="/media/iffy-film-poster.webp"
             alt="Iffy Khan speaking with a client on the phone"
             fill
             sizes="(min-width: 1024px) 34vw, 86vw"
-            className="object-cover"
+            className="object-cover object-center"
           />
         ) : null}
         <video
           ref={videoRef}
-          className={`h-full w-full object-cover transition-opacity duration-300 ${activated ? "opacity-100" : "opacity-0"}`}
+          className={`h-full w-full object-cover object-center transition-opacity duration-300 ${activated ? "opacity-100" : "opacity-0"}`}
           preload="none"
           poster="/media/iffy-film-poster.webp"
           playsInline
@@ -72,7 +72,7 @@ export function AdvisorFilm() {
             playbackErrorRef.current = true;
             setPlaying(false);
             setPlaybackStatus(
-              "The film could not load. Try again, or read the transcript below.",
+              "The film could not load. Try again.",
             );
           }}
           onPlay={() => {
@@ -92,7 +92,7 @@ export function AdvisorFilm() {
             ) {
               playbackErrorRef.current = true;
               setPlaybackStatus(
-                "The film could not load. Try again, or read the transcript below.",
+                "The film could not load. Try again.",
               );
             } else if (!pendingRef.current) {
               setPlaybackStatus("The film is paused.");
@@ -119,11 +119,11 @@ export function AdvisorFilm() {
             className="absolute inset-0 flex min-h-11 min-w-11 items-end justify-start bg-[linear-gradient(180deg,transparent_45%,rgba(5,13,12,0.78))] p-5 text-left text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-6px] focus-visible:outline-white sm:p-7"
             aria-label="Play the Meet Iffy film"
           >
-            <span className="flex items-center gap-3 text-base font-semibold">
-              <span className="grid size-12 place-items-center rounded-full bg-white text-[#0a1514] shadow-lg">
+            <span className="flex items-center gap-3 text-lg font-semibold tracking-[-0.025em] sm:text-xl">
+              <span className="grid size-12 shrink-0 place-items-center rounded-full bg-[var(--paper)] text-[#0a1514] shadow-lg sm:size-14">
                 <Play aria-hidden="true" size={19} weight="fill" />
               </span>
-              {pending ? "Loading film…" : "Meet Iffy. 94 seconds."}
+              {pending ? "Loading film…" : "Meet me in 90 seconds"}
             </span>
           </button>
         ) : (
@@ -142,28 +142,16 @@ export function AdvisorFilm() {
           </button>
         )}
       </div>
-      <p aria-live="polite" className="mt-3 text-sm text-[var(--muted)]">
+      <p
+        aria-live="polite"
+        className={
+          playbackStatus.includes("could not")
+            ? "mt-3 text-sm text-[var(--muted)]"
+            : "sr-only"
+        }
+      >
         {playbackStatus}
       </p>
-      <details className="mt-5 text-sm leading-relaxed text-[var(--muted)]">
-        <summary className="min-h-11 cursor-pointer py-3 font-semibold text-[var(--ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-strong)]">
-          Read what the film covers
-        </summary>
-        <div className="mt-3 space-y-4">
-          <p>
-            Iffy introduces himself as a Manchester native who began in retail banking. After six years investing in UK property, he decided to advise others in a market and city he enjoyed.
-          </p>
-          <p>
-            He talks about Dubai&apos;s ambition, the importance of working with a strong team and his focus on off-plan property.
-          </p>
-          <p>
-            A recent deal began as a coffee chat with clients who only wanted information. Clear answers gave them the confidence to proceed.
-          </p>
-          <p>
-            Iffy also describes joining Kamani as a full-circle family moment, then explains the hunger, work ethic and standards he brings to the role.
-          </p>
-        </div>
-      </details>
     </div>
   );
 }

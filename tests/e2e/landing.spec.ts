@@ -5,22 +5,45 @@ test.describe("trust-first landing page", () => {
     await page.emulateMedia({ reducedMotion: "reduce" });
   });
 
-  test("communicates the offer and both advice routes within two mobile viewports", async ({ page }) => {
+  test("communicates the offer and gives buying and selling distinct routes", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
 
-    await expect(page.getByRole("heading", { name: "IFFY", exact: true })).toBeVisible();
-    await expect(page.getByText("Licence 91889", { exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Advice you can hold me to.", exact: true })).toBeVisible();
 
-    const buying = page.getByRole("heading", { name: "Know what you are buying into." });
-    const selling = page.getByRole("heading", { name: "Sell with the facts on your side." });
+    const buying = page.getByRole("heading", { name: "Buy", exact: true });
+    const selling = page.getByRole("heading", { name: "Sell", exact: true });
     await expect(buying).toBeVisible();
     await expect(selling).toBeVisible();
 
     const buyingY = await buying.evaluate((element) => element.getBoundingClientRect().top + window.scrollY);
     const sellingY = await selling.evaluate((element) => element.getBoundingClientRect().top + window.scrollY);
-    expect(buyingY).toBeLessThanOrEqual(1688);
-    expect(sellingY).toBeLessThanOrEqual(1688);
+    expect(sellingY).toBeGreaterThan(buyingY);
+    await expect(page.getByRole("link", { name: /Build an investment brief/ })).toHaveAttribute(
+      "href",
+      "/?intent=investing#consultation",
+    );
+  });
+
+  test("routes the mobile Selling link to the Sell panel", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    await page.getByRole("button", { name: "Open navigation" }).click();
+    await page
+      .getByLabel("Mobile navigation")
+      .getByRole("link", { name: "Sell", exact: true })
+      .click();
+
+    await expect(page).toHaveURL(/intent=selling#selling$/);
+    await expect(
+      page.locator("#selling").getByRole("heading", {
+        name: "Sell",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(page.locator("#selling")).toContainText(
+      "A clear route from the first pricing conversation to handover.",
+    );
   });
 
   test("keeps the advisor film out of the request graph until Play", async ({ page }) => {
@@ -37,55 +60,25 @@ test.describe("trust-first landing page", () => {
     await expect.poll(() => requests.some((url) => url.endsWith("/media/iffy-film.mp4"))).toBe(true);
   });
 
-  test("keeps the transcript usable when advisor-film playback fails", async ({ page }) => {
+  test("shows recovery guidance when advisor-film playback fails", async ({ page }) => {
     await page.route("**/media/iffy-film.mp4", (route) => route.abort());
     await page.goto("/");
 
     await page.getByRole("button", { name: "Play the Meet Iffy film" }).click();
     await expect(
-      page.getByText(/The film could not (?:load|play)\./),
+      page.getByText(/The film could not (?:load|play)\. Try again\./),
     ).toBeVisible();
-    await expect(page.getByText("Read what the film covers")).toBeVisible();
+    await expect(page.getByText("Read what the film covers")).toHaveCount(0);
   });
 
-  test("handles the normal-motion arc lifecycle and fails open on time", async ({ page }) => {
+  test("shows the normal-motion hero immediately without a blocking curtain", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "no-preference" });
-    await page.addInitScript(() => {
-      window.sessionStorage.removeItem("iffy-arc-v1");
-      const state = window as typeof window & { __iffyArcPhases?: string[] };
-      state.__iffyArcPhases = [];
-      const record = () => {
-        const phase = document
-          .querySelector("[data-arc-phase]")
-          ?.getAttribute("data-arc-phase");
-        if (phase && state.__iffyArcPhases?.at(-1) !== phase) {
-          state.__iffyArcPhases?.push(phase);
-        }
-      };
-      new MutationObserver(record).observe(document, {
-        attributes: true,
-        childList: true,
-        subtree: true,
-      });
-    });
-
     await page.goto("/");
-    const arc = page.locator("[data-arc-phase]");
-    await expect(arc).toHaveAttribute("data-arc-phase", "done", {
-      timeout: 1_800,
-    });
-    const exitReason = await arc.getAttribute("data-arc-exit-reason");
-    expect(["completed", "late-hydration", "timeout"]).toContain(exitReason);
-    const phases = await page.evaluate(
-      () =>
-        (window as typeof window & { __iffyArcPhases?: string[] })
-          .__iffyArcPhases ?? [],
-    );
-    expect(phases).toContain("idle");
-    expect(phases.at(-1)).toBe("done");
-    if (phases.includes("intro")) expect(phases).toContain("reveal");
-    if (phases.includes("reveal")) expect(exitReason).toBe("completed");
-    await expect(page.getByRole("link", { name: "Talk to Iffy" }).first()).toBeVisible();
+
+    await expect(page.locator("[data-arc-phase]")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Advice you can hold me to." })).toBeVisible();
+    await expect(page.locator("[data-hero-media]")).toHaveCount(1);
+    await expect(page.getByRole("link", { name: "Talk to me" }).first()).toBeVisible();
   });
 
   test("uses local media and avoids banned display punctuation", async ({ page }) => {

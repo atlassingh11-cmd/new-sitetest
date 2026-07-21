@@ -1,10 +1,7 @@
 import { act, cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import {
-  DeferredAdvisoryTools,
-  DeferredConsultation,
-} from "@/components/landing/deferred-islands";
+import { DeferredConsultation } from "@/components/landing/deferred-islands";
 
 vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(window.location.search),
@@ -35,20 +32,27 @@ function holdDeferredIslands() {
   vi.stubGlobal("IntersectionObserver", MockIntersectionObserver);
 
   return {
-    enter: () => {
+    enter: async () => {
       if (!callback) throw new Error("Deferred island was not observed.");
-      act(() =>
+      await act(async () => {
         callback?.(
           [{ isIntersecting: true } as IntersectionObserverEntry],
           {} as IntersectionObserver,
-        ),
-      );
+        );
+        // Let Vite resolve the deferred module and React commit the state
+        // change before the assertion leaves `act`.
+        await new Promise((resolve) => window.setTimeout(resolve, 0));
+      });
     },
     observe,
   };
 }
 
 describe("deferred landing islands", () => {
+  beforeEach(() => {
+    vi.stubGlobal("scrollTo", vi.fn());
+  });
+
   afterEach(() => {
     cleanup();
     vi.unstubAllGlobals();
@@ -61,30 +65,39 @@ describe("deferred landing islands", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: "Tell Iffy what you are considering.",
+        name: "Tell me what you're weighing up.",
       }),
     ).toBeVisible();
     expect(
       screen.getByRole("link", { name: /WhatsApp \+971/ }),
     ).toHaveAttribute("href", "https://wa.me/971585802689");
     expect(screen.queryByLabelText("Your name")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("img", {
+        name: "Iffy Khan reviewing a property brief",
+      }),
+    ).toBeVisible();
     expect(observer.observe).toHaveBeenCalledOnce();
   });
 
-  it("loads each interactive island when its shell nears the viewport", async () => {
-    const toolsObserver = holdDeferredIslands();
-    const { unmount } = render(<DeferredAdvisoryTools />);
-    toolsObserver.enter();
-    expect(
-      await screen.findByRole("tab", { name: "Area finder" }),
-    ).toBeVisible();
-    unmount();
-
-    const consultationObserver = holdDeferredIslands();
-    render(<DeferredConsultation />);
-    consultationObserver.enter();
-    expect(await screen.findByLabelText("Your name")).toBeVisible();
-  });
+  it(
+    "loads the consultation when its shell nears the viewport",
+    async () => {
+      const observer = holdDeferredIslands();
+      render(<DeferredConsultation />);
+      await observer.enter();
+      expect(
+        await screen.findByRole(
+          "group",
+          {
+            name: "What are you weighing up?",
+          },
+          { timeout: 8000 },
+        ),
+      ).toBeVisible();
+    },
+    10_000,
+  );
 
   it("loads a consultation deep link even if layout work moves it off screen", async () => {
     window.history.replaceState({}, "", "/?intent=investing#consultation");
@@ -92,7 +105,9 @@ describe("deferred landing islands", () => {
 
     render(<DeferredConsultation />);
 
-    expect(await screen.findByLabelText("Your name")).toBeVisible();
+    expect(await screen.findByRole("textbox", {
+      name: "What should I call you?",
+    })).toBeVisible();
     expect(observer.observe).not.toHaveBeenCalled();
   });
 

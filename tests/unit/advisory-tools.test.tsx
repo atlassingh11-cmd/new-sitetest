@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 import { AdvisoryTools } from "@/components/tools/advisory-tools";
 import {
   recommendAreas,
@@ -15,6 +15,11 @@ import {
   type OffPlanAnswers,
 } from "@/components/tools/off-plan-check";
 import legacyTools from "@/tests/fixtures/legacy-tools.json";
+
+afterEach(() => {
+  cleanup();
+  window.history.replaceState({}, "", "/");
+});
 
 describe("legacy advisory tool behavior", () => {
   it("matches every frozen area-finder example", () => {
@@ -90,17 +95,111 @@ describe("legacy advisory tool behavior", () => {
 });
 
 describe("advisory tool disclosure", () => {
-  it("shows one semantic panel and supports arrow-key tab selection", () => {
+  it("shows one semantic tool panel and switches it with the stacked tabs", () => {
     render(<AdvisoryTools />);
     const areaTab = screen.getByRole("tab", { name: "Area finder" });
     const budgetTab = screen.getByRole("tab", { name: "Budget calculator" });
+
     expect(areaTab).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByRole("tabpanel")).toHaveAccessibleName("Area finder");
+    expect(screen.getByRole("tablist", { name: "Choose a tool" })).toHaveAttribute(
+      "aria-orientation",
+      "vertical",
+    );
+    expect(
+      screen.queryByRole("combobox", { name: "Choose a tool" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("tabpanel", { name: "Area finder" }),
+    ).toBeVisible();
+
+    fireEvent.click(budgetTab);
+    expect(budgetTab).toHaveAttribute("aria-selected", "true");
+    expect(
+      screen.getByRole("tabpanel", { name: "Budget calculator" }),
+    ).toBeVisible();
+  });
+
+  it("wraps and jumps to the ends of the tool stack", async () => {
+    render(<AdvisoryTools />);
+    const areaTab = screen.getByRole("tab", { name: "Area finder" });
 
     areaTab.focus();
-    fireEvent.keyDown(areaTab, { key: "ArrowRight" });
-    expect(budgetTab).toHaveAttribute("aria-selected", "true");
-    expect(budgetTab).toHaveFocus();
-    expect(screen.getByRole("tabpanel")).toHaveAccessibleName("Budget calculator");
+    fireEvent.keyDown(areaTab, { key: "ArrowUp" });
+    await waitFor(() =>
+      expect(screen.getByRole("tab", { name: "Off-plan or ready" })).toHaveFocus(),
+    );
+
+    fireEvent.keyDown(screen.getByRole("tab", { name: "Off-plan or ready" }), {
+      key: "Home",
+    });
+    await waitFor(() => expect(areaTab).toHaveFocus());
+
+    fireEvent.keyDown(areaTab, { key: "End" });
+    await waitFor(() =>
+      expect(screen.getByRole("tab", { name: "Off-plan or ready" })).toHaveFocus(),
+    );
+  });
+
+  it("supports arrow-key navigation through the tool stack", async () => {
+    render(<AdvisoryTools />);
+    const areaTab = screen.getByRole("tab", { name: "Area finder" });
+
+    areaTab.focus();
+    fireEvent.keyDown(areaTab, { key: "ArrowDown" });
+
+    await waitFor(() =>
+      expect(screen.getByRole("tab", { name: "Budget calculator" })).toHaveFocus(),
+    );
+    expect(
+      screen.getByRole("tabpanel", { name: "Budget calculator" }),
+    ).toBeVisible();
+  });
+
+  it("reveals one area question at a time with an explicit next action", () => {
+    render(<AdvisoryTools />);
+
+    expect(
+      screen.getByRole("group", { name: "Are you buying to live or invest?" }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole("group", { name: "Your budget" }),
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("radio", { name: "To live" }));
+    fireEvent.click(screen.getByRole("button", { name: "Next" }));
+
+    expect(screen.getByRole("group", { name: "Your budget" })).toBeVisible();
+    expect(screen.getByLabelText("Question 2 of 5")).toBeVisible();
+  });
+
+  it("opens the off-plan tool when the landing link requests it", async () => {
+    window.history.replaceState({}, "", "/?tool=offplan#tools");
+    render(<AdvisoryTools />);
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole("tab", { name: "Off-plan or ready" }),
+      ).toHaveAttribute("aria-selected", "true"),
+    );
+    expect(
+      screen.getByRole("tabpanel", { name: "Off-plan or ready" }),
+    ).toBeVisible();
+  });
+
+  it("keeps the initial tools surface to the heading, selector and form", () => {
+    render(<AdvisoryTools />);
+
+    expect(
+      screen.getByRole("heading", {
+        name: "Make the first decision better.",
+      }),
+    ).toBeVisible();
+    expect(screen.getAllByRole("tab")).toHaveLength(3);
+    expect(
+      screen.queryByText(/Choose a starting point/),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Answer one question at a time/),
+    ).not.toBeInTheDocument();
   });
 });

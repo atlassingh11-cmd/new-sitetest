@@ -99,10 +99,36 @@ export const mediaManifest = [
     "width": 1068,
     "height": 1600,
     "bytes": 78128,
-    "use": "homepage LCP and about",
-    "loading": "eager",
+    "use": "consultation and about",
+    "loading": "lazy",
     "fallback": null,
     "provenance": "Repository asset"
+  },
+  {
+    "id": "iffy-hero-poster-webp",
+    "publicPath": "/media/iffy-hero-poster.webp",
+    "sourcePath": "public/media/iffy-hero.mp4 at 3.25 seconds",
+    "kind": "image",
+    "width": 480,
+    "height": 848,
+    "bytes": 22456,
+    "use": "homepage LCP poster",
+    "loading": "eager",
+    "fallback": null,
+    "provenance": "Derived from repository video"
+  },
+  {
+    "id": "ik-logo-png",
+    "publicPath": "/media/ik-logo.png",
+    "sourcePath": "User supplied IK Logo/2.png",
+    "kind": "image",
+    "width": 512,
+    "height": 468,
+    "bytes": 14298,
+    "use": "site header brand mark",
+    "loading": "eager",
+    "fallback": null,
+    "provenance": "User-supplied brand asset"
   },
   {
     "id": "iffy-event-webp",
@@ -164,7 +190,7 @@ export const mediaManifest = [
     "width": 1600,
     "height": 2132,
     "bytes": 320962,
-    "use": "homepage parallax",
+    "use": "legacy redirect target",
     "loading": "lazy-near-section",
     "fallback": null,
     "provenance": "Repository asset"
@@ -177,7 +203,7 @@ export const mediaManifest = [
     "width": 1600,
     "height": 1200,
     "bytes": 282742,
-    "use": "homepage parallax",
+    "use": "legacy redirect target",
     "loading": "lazy-near-section",
     "fallback": null,
     "provenance": "Repository asset"
@@ -190,7 +216,7 @@ export const mediaManifest = [
     "width": 1600,
     "height": 2400,
     "bytes": 372550,
-    "use": "homepage parallax",
+    "use": "legacy redirect target",
     "loading": "lazy-near-section",
     "fallback": null,
     "provenance": "Repository asset"
@@ -203,10 +229,49 @@ export const mediaManifest = [
     "width": 1600,
     "height": 1088,
     "bytes": 163088,
-    "use": "homepage route and consultation",
+    "use": "consultation",
     "loading": "lazy",
     "fallback": null,
     "provenance": "Repository asset"
+  },
+  {
+    "id": "buy-villa-editorial-webp",
+    "publicPath": "/media/buy-villa-editorial.webp",
+    "sourcePath": "OpenAI image generation, 2026-07-14",
+    "kind": "image",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 210722,
+    "use": "homepage buying route",
+    "loading": "lazy",
+    "fallback": null,
+    "provenance": "Generated for this site with OpenAI image generation"
+  },
+  {
+    "id": "sell-villa-editorial-webp",
+    "publicPath": "/media/sell-villa-editorial.webp",
+    "sourcePath": "OpenAI image generation, 2026-07-14",
+    "kind": "image",
+    "width": 1122,
+    "height": 1402,
+    "bytes": 198670,
+    "use": "homepage selling route",
+    "loading": "lazy",
+    "fallback": null,
+    "provenance": "Generated for this site with OpenAI image generation"
+  },
+  {
+    "id": "inspection-editorial-webp",
+    "publicPath": "/media/inspection-editorial.webp",
+    "sourcePath": "OpenAI image generation, 2026-07-14",
+    "kind": "image",
+    "width": 1448,
+    "height": 1086,
+    "bytes": 99362,
+    "use": "homepage editorial bridge",
+    "loading": "lazy",
+    "fallback": null,
+    "provenance": "Generated for this site with OpenAI image generation"
   },
   {
     "id": "business-bay-webp",
@@ -216,7 +281,7 @@ export const mediaManifest = [
     "width": 1600,
     "height": 1068,
     "bytes": 173308,
-    "use": "area guide and parallax",
+    "use": "area guide",
     "loading": "route-priority",
     "fallback": null,
     "provenance": "Repository asset"
@@ -242,7 +307,7 @@ export const mediaManifest = [
     "width": 1180,
     "height": 787,
     "bytes": 205506,
-    "use": "area guide and parallax",
+    "use": "area guide",
     "loading": "route-priority",
     "fallback": null,
     "provenance": "Repository asset"
@@ -294,7 +359,7 @@ export const mediaManifest = [
     "width": 1600,
     "height": 1079,
     "bytes": 260858,
-    "use": "area guide and parallax",
+    "use": "area guide",
     "loading": "route-priority",
     "fallback": null,
     "provenance": "Repository asset"
@@ -426,7 +491,7 @@ export const mediaManifest = [
     "bytes": 802811,
     "use": "homepage portrait enhancement",
     "loading": "after-lcp",
-    "fallback": "/media/iffy-film-poster.webp",
+    "fallback": "/media/iffy-hero-poster.webp",
     "provenance": "Repository asset"
   },
   {

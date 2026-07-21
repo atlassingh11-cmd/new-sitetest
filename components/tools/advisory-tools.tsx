@@ -1,6 +1,7 @@
 "use client";
 
-import { KeyboardEvent, useId, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { ArrowRight } from "@phosphor-icons/react";
 import { AreaFinder } from "./area-finder";
 import { BudgetCalculator } from "./budget-calculator";
 import { OffPlanCheck } from "./off-plan-check";
@@ -11,30 +12,134 @@ const TOOLS = [
   { id: "offplan", label: "Off-plan or ready", component: OffPlanCheck },
 ] as const;
 
+function wrappedIndex(index: number) {
+  return (index + TOOLS.length) % TOOLS.length;
+}
+
 export function AdvisoryTools() {
-  const uid = useId();
   const [active, setActive] = useState(0);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const CurrentTool = TOOLS[active].component;
 
-  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    let next = active;
-    if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (active + 1) % TOOLS.length;
-    else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (active - 1 + TOOLS.length) % TOOLS.length;
-    else if (event.key === "Home") next = 0;
-    else if (event.key === "End") next = TOOLS.length - 1;
-    else return;
-    event.preventDefault();
+  function selectTool(index: number, focus = false) {
+    const next = wrappedIndex(index);
     setActive(next);
-    document.getElementById(`${uid}-tab-${TOOLS[next].id}`)?.focus();
+    if (focus) {
+      window.requestAnimationFrame(() => tabRefs.current[next]?.focus());
+    }
   }
 
-  return <section id="tools" aria-labelledby={`${uid}-heading`} className="tool-atmosphere py-20 text-[var(--ink)] sm:py-28">
-    <div className="mx-auto w-[min(100%-2rem,72rem)]">
-      <div className="max-w-2xl"><h2 id={`${uid}-heading`} className="text-4xl font-medium tracking-tight sm:text-6xl">Useful starting points, not final advice.</h2><p className="mt-6 text-lg leading-8 text-[var(--muted)]">Get a quick area, budget or buying-route starting point. Iffy can then test it against the details that matter.</p></div>
-      <div role="tablist" aria-label="Property advisory tools" onKeyDown={handleKeyDown} className="mt-12 flex flex-wrap gap-2">
-        {TOOLS.map((tool, index) => <button key={tool.id} id={`${uid}-tab-${tool.id}`} role="tab" aria-selected={active === index} aria-controls={`${uid}-panel-${tool.id}`} tabIndex={active === index ? 0 : -1} onClick={() => setActive(index)} type="button" className={`min-h-11 rounded-full px-5 py-3 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent-strong)] ${active === index ? "bg-[var(--ink)] text-[var(--limestone)]" : "bg-[color-mix(in_oklch,var(--paper)_72%,transparent)] text-[var(--ink-soft)] hover:bg-[var(--paper)]"}`}>{tool.label}</button>)}
+  function handleToolKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    if (!["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) {
+      return;
+    }
+
+    event.preventDefault();
+    if (event.key === "Home") return selectTool(0, true);
+    if (event.key === "End") return selectTool(TOOLS.length - 1, true);
+    const direction = event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1;
+    selectTool(active + direction, true);
+  }
+
+  useEffect(() => {
+    const requestedTool = new URLSearchParams(window.location.search).get("tool");
+    const requestedIndex = TOOLS.findIndex((tool) => tool.id === requestedTool);
+    if (requestedIndex < 0) return;
+    const timer = window.setTimeout(() => setActive(requestedIndex), 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const updateStickyOffset = () => {
+      section.style.setProperty(
+        "--tool-sheet-height",
+        `${section.getBoundingClientRect().height}px`,
+      );
+    };
+
+    updateStickyOffset();
+    if (typeof ResizeObserver !== "function") return;
+
+    const observer = new ResizeObserver(updateStickyOffset);
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      aria-labelledby="tools-heading"
+      className="tool-atmosphere bg-[var(--limestone)] py-12 text-[var(--ink)] sm:py-20 lg:py-24"
+      data-scroll-chapter=""
+      id="tools"
+      ref={sectionRef}
+      style={{ backgroundImage: "none" }}
+    >
+      <div className="mx-auto w-[min(100%-2rem,52rem)]">
+        <header className="max-w-[46rem]">
+          <h2
+            className="text-balance text-[clamp(2.55rem,5.5vw,4.4rem)] font-medium leading-[0.96] tracking-[-0.05em]"
+            id="tools-heading"
+          >
+            Make the first decision better.
+          </h2>
+        </header>
+
+        <div
+          aria-label="Choose a tool"
+          aria-orientation="vertical"
+          className="tool-stack mt-9 sm:mt-12"
+          role="tablist"
+        >
+          {TOOLS.map((tool, index) => {
+            const selected = index === active;
+
+            return (
+              <button
+                aria-controls="active-advisory-tool"
+                aria-selected={selected}
+                className="tool-stack__card"
+                data-active={selected ? "true" : "false"}
+                id={`tool-tab-${tool.id}`}
+                key={tool.id}
+                onClick={() => selectTool(index)}
+                onKeyDown={handleToolKeyDown}
+                ref={(element) => {
+                  tabRefs.current[index] = element;
+                }}
+                role="tab"
+                tabIndex={selected ? 0 : -1}
+                type="button"
+              >
+                <span aria-hidden="true" className="tool-stack__number">
+                  0{index + 1}
+                </span>
+                <span className="tool-stack__label">{tool.label}</span>
+                <ArrowRight
+                  aria-hidden="true"
+                  className="tool-stack__arrow"
+                  size={24}
+                  weight="regular"
+                />
+              </button>
+            );
+          })}
+        </div>
+
+        <div
+          aria-labelledby={`tool-tab-${TOOLS[active].id}`}
+          className="tool-panel mt-12 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[var(--gulf)] sm:mt-16"
+          id="active-advisory-tool"
+          key={TOOLS[active].id}
+          role="tabpanel"
+          tabIndex={0}
+        >
+          <CurrentTool />
+        </div>
       </div>
-      <div id={`${uid}-panel-${TOOLS[active].id}`} role="tabpanel" aria-labelledby={`${uid}-tab-${TOOLS[active].id}`} className="mt-10 max-w-4xl" tabIndex={0}><CurrentTool /></div>
-    </div>
-  </section>;
+    </section>
+  );
 }

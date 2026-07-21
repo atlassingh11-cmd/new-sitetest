@@ -111,6 +111,19 @@ describe("ConsultationCalendar", () => {
     });
   });
 
+  it("uses one translucent glass surface and full-width time rows", () => {
+    render(<CalendarHarness initial={{ date: "2026-07-13" }} />);
+
+    const calendar = screen.getByRole("group", { name: "Preferred day" });
+    expect(calendar).toHaveClass("border-white/10", "bg-black/20", "backdrop-blur-xl");
+
+    const morning = screen.getByRole("radio", {
+      name: "Morning, 9am to 12pm",
+    });
+    expect(morning.closest("label")).toHaveClass("border-b");
+    expect(morning.closest("label")).not.toHaveClass("rounded-full");
+  });
+
   it("prevents a window-only preference and clears the window with the date", () => {
     const onValue = vi.fn();
     const { rerender } = render(
@@ -120,8 +133,8 @@ describe("ConsultationCalendar", () => {
       />,
     );
     expect(
-      screen.getByRole("radio", { name: "Morning, 9am to 12pm" }),
-    ).toBeDisabled();
+      screen.queryByRole("radio", { name: "Morning, 9am to 12pm" }),
+    ).not.toBeInTheDocument();
 
     rerender(
       <ConsultationCalendar
@@ -129,6 +142,9 @@ describe("ConsultationCalendar", () => {
         value={{ date: "2026-07-13", window: "evening" }}
       />,
     );
+    expect(
+      screen.getByRole("radio", { name: "Evening, 4pm to 7pm" }),
+    ).toBeChecked();
     fireEvent.click(screen.getByRole("button", { name: "Clear day" }));
     expect(onValue).toHaveBeenLastCalledWith({});
   });
@@ -158,16 +174,17 @@ describe("ConsultationCalendar", () => {
     );
   });
 
-  it("switches to a native date input at narrow widths without a grid", () => {
+  it("keeps the glass day rail at narrow client widths", () => {
     installMatchMedia(true);
     render(<CalendarHarness />);
 
-    const input = screen.getByLabelText("Preferred day in Dubai");
-    expect(input).toHaveAttribute("type", "date");
-    expect(input).toHaveAttribute("min", "2026-07-13");
-    expect(input).toHaveAttribute("max", "2026-09-10");
-    expect(input).toHaveAttribute("data-date-input");
-    expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("Preferred day in Dubai"),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("grid")).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "Monday, 13 July 2026" }),
+    ).toHaveAttribute("data-date-input");
   });
 
   it("refreshes at Dubai midnight and clamps the roving focus target", () => {

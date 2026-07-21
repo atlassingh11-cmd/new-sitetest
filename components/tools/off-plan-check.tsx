@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { FormPicker } from "./form-picker";
 
 export interface OffPlanAnswers {
   when: "now" | "soon" | "flex";
@@ -66,17 +67,56 @@ export function OffPlanCheck() {
     if (Object.keys(answers).length !== QUESTIONS.length) { setError("Please answer all five questions first."); return; }
     setError(""); setResult(checkOffPlanSuitability(answers as OffPlanAnswers));
   }
-  return <form onSubmit={submit} className="space-y-10">
-    <p className="text-lg text-stone-600">Five questions. Your route.</p>
-    {QUESTIONS.map((question, index) => <fieldset key={question.name} className="space-y-4">
-      <legend className="text-lg font-medium text-stone-950"><span className="mr-3 text-sm tabular-nums text-stone-500">{String(index + 1).padStart(2, "0")}</span>{question.legend}</legend>
-      <div className="flex flex-wrap gap-2">{question.options.map(([value, label]) => {
-        const selected = answers[question.name] === value;
-        return <label key={value} className={`cursor-pointer rounded-full px-4 py-3 text-sm transition has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 ${selected ? "bg-stone-950 text-white" : "bg-stone-100 text-stone-700 hover:bg-stone-200"}`}><input className="sr-only" type="radio" name={question.name} value={value} checked={selected} onChange={() => setAnswers((current) => ({ ...current, [question.name]: value }))} />{label}</label>;
-      })}</div>
-    </fieldset>)}
-    <button type="submit" className="min-h-11 rounded-full bg-stone-950 px-6 py-3 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">Show my result</button>
-    {error ? <p role="alert" className="text-sm text-red-700">{error}</p> : null}
-    {result ? <div aria-live="polite" className="space-y-6 bg-stone-100 p-6 sm:p-8"><h3 className="text-2xl font-medium text-stone-950">{result.heading}</h3><p className="text-stone-600">{result.detail}</p>{result.reasons.length ? <ul className="space-y-2 text-sm text-stone-600">{result.reasons.slice(0, 3).map((reason) => <li key={reason}>{reason}</li>)}</ul> : null}<p className="text-sm text-stone-500">A guide, not advice. Off-plan carries construction and delivery risk; ready stock carries pricing and condition risk. Both are manageable with the right due diligence.</p><Link href="/?intent=investing#consultation" className="inline-flex min-h-11 items-center rounded-full bg-stone-950 px-5 py-3 text-sm font-medium text-white">Get Iffy&apos;s recommendation</Link></div> : null}
-  </form>;
+  return (
+    <div>
+      <FormPicker
+        actionLabel="Compare the routes"
+        answers={answers}
+        error={error}
+        onAnswer={(name, value) => {
+          setAnswers((current) => ({ ...current, [name]: value }));
+          setResult(null);
+          setError("");
+        }}
+        onSubmit={submit}
+        questions={QUESTIONS}
+      />
+
+      {result ? (
+        <section
+          aria-live="polite"
+          className="mt-14 bg-[var(--ink)] px-6 py-10 text-[var(--limestone)] sm:px-10 sm:py-12"
+        >
+          <h3 className="max-w-2xl text-3xl font-medium tracking-[-0.035em] sm:text-4xl">
+            {result.heading}
+          </h3>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--limestone-deep)]">
+            {result.detail}
+          </p>
+          {result.reasons.length ? (
+            <ul className="mt-8 border-t border-[color-mix(in_oklch,var(--limestone)_22%,transparent)]">
+              {result.reasons.slice(0, 3).map((reason) => (
+                <li
+                  className="border-b border-[color-mix(in_oklch,var(--limestone)_22%,transparent)] py-5 text-base leading-7 text-[var(--limestone-deep)]"
+                  key={reason}
+                >
+                  {reason}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <p className="mt-7 max-w-2xl text-base leading-7 text-[var(--limestone-deep)]">
+            This is a guide, not advice. Both routes need project-level due
+            diligence before you act.
+          </p>
+          <Link
+            className="mt-7 inline-flex min-h-12 items-center rounded-full bg-[var(--sea-glass)] px-6 py-3 text-base font-medium text-[var(--ink)] transition-colors hover:bg-[var(--limestone)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--sea-glass)]"
+            href="/?intent=investing#consultation"
+          >
+            Ask Iffy to compare the options
+          </Link>
+        </section>
+      ) : null}
+    </div>
+  );
 }

@@ -1,29 +1,28 @@
 import { AdviceRoutes } from "@/components/landing/advice-routes";
 import { AdvisorProof } from "@/components/landing/advisor-proof";
-import { AdvisoryProcess } from "@/components/landing/advisory-process";
-import { AreaIntelligence } from "@/components/landing/area-intelligence";
 import { ClientProof } from "@/components/landing/client-proof";
-import {
-  DeferredAdvisoryTools,
-  DeferredConsultation,
-} from "@/components/landing/deferred-islands";
+import { DeferredConsultation } from "@/components/landing/deferred-islands";
+import { EditorialInspection } from "@/components/landing/editorial-inspection";
 import { Hero } from "@/components/landing/hero";
-import { MarketPerspective } from "@/components/landing/market-perspective";
-import { TrustLedger } from "@/components/landing/trust-ledger";
+import { LandingMotion } from "@/components/landing/landing-motion";
+import { AdvisoryTools } from "@/components/tools/advisory-tools";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <TrustLedger />
       <AdviceRoutes />
       <AdvisorProof />
       <ClientProof />
-      <MarketPerspective />
-      <AdvisoryProcess />
-      <AreaIntelligence />
-      <DeferredAdvisoryTools />
-      <DeferredConsultation />
+      <div
+        className="inspection-tools-reveal"
+        data-inspection-tools-reveal=""
+      >
+        <EditorialInspection />
+        <AdvisoryTools />
+        <DeferredConsultation />
+      </div>
+      <LandingMotion />
     </>
   );
 }

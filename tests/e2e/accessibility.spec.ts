@@ -17,6 +17,7 @@ test("mobile visitors can navigate the static export without JavaScript", async 
   await expect(
     staticNavigation.getByRole("link", { name: "Areas", exact: true }),
   ).toBeVisible();
+  await expect(page.locator("#tools")).toHaveCSS("position", "relative");
 
   await context.close();
 });
@@ -26,17 +27,47 @@ test.describe("accessibility contract", () => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
 
-    await expect(page.locator("[data-arc-phase='done']")).toBeVisible();
-    await expect(page.locator(".iffy-parallax-static")).toBeVisible();
-    await expect(page.getByRole("heading", { name: "IFFY", exact: true })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Tell Iffy what you are considering." })).toBeVisible();
+    await expect(page.locator("[data-arc-phase]")).toHaveCount(0);
+    const heroMedia = page.locator("[data-hero-media]");
+    await expect(heroMedia).toBeVisible();
+    await expect(heroMedia).toHaveCSS("transform", "none");
+    await page.evaluate(() => window.scrollTo({ top: 320 }));
+    await expect(heroMedia).toHaveCSS("transform", "none");
+    await expect(
+      page.getByRole("img", {
+        name: /Keys, a floor plan, notebook and laser measure/,
+      }),
+    ).toBeVisible();
+    await expect(page.locator("[data-inspection-sticky]")).toHaveCSS(
+      "position",
+      "relative",
+    );
+    await expect(page.locator("#tools")).toHaveCSS("margin-top", "0px");
+    await expect(
+      page.locator("[data-parallax-static], [data-parallax-motion]"),
+    ).toHaveCount(0);
+    await expect(
+      page.getByRole("heading", {
+        name: "Advice you can hold me to.",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Tell me what you're weighing up." }),
+    ).toBeVisible();
   });
 
   test("provides labelled consultation controls and a visible keyboard focus", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/#consultation");
 
-    const name = page.getByLabel("Your name");
+    const intentGroup = page.getByRole("group", {
+      name: "What are you weighing up?",
+    });
+    await expect(intentGroup).toBeVisible();
+    await intentGroup.getByRole("radio", { name: "Buying" }).click();
+
+    const name = page.getByLabel("What should I call you?");
     await expect(name).toBeVisible();
     await name.focus();
     await expect(name).toBeFocused();
@@ -47,7 +78,22 @@ test.describe("accessibility contract", () => {
     });
     expect(outline).not.toBe("none none");
 
-    await expect(page.getByRole("group", { name: "What would you like help with?" })).toBeVisible();
-    await expect(page.getByText("This is a preference, not live availability.")).toBeVisible();
+    await name.fill("Amina");
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    const timingDisclosure = page.getByRole("button", {
+      name: "Choose a preferred time",
+    });
+    await expect(timingDisclosure).toHaveAttribute("aria-expanded", "false");
+    await expect(page.getByRole("grid")).toHaveCount(0);
+
+    await timingDisclosure.click();
+    await expect(
+      page.getByRole("button", { name: "Hide the calendar" }),
+    ).toHaveAttribute("aria-expanded", "true");
+    await expect(
+      page.getByRole("group", {
+        name: "Dubai time. This is a preference, not a booking.",
+      }),
+    ).toBeVisible();
   });
 });

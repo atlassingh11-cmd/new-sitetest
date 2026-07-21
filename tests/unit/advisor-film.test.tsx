@@ -29,6 +29,7 @@ describe("AdvisorFilm", () => {
     const { container } = render(<AdvisorFilm />);
     const video = container.querySelector("video");
 
+    expect(screen.getByText("Meet me in 90 seconds")).toBeVisible();
     expect(video).not.toHaveAttribute("src");
     expect(container.innerHTML).not.toContain("iffy-film.mp4");
 
@@ -60,7 +61,7 @@ describe("AdvisorFilm", () => {
     );
     expect(
       await screen.findByText(
-        "The film could not play. Try again, or read the transcript below.",
+        "The film could not play. Try again.",
       ),
     ).toHaveAttribute("aria-live", "polite");
 

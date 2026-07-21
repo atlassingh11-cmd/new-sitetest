@@ -4,7 +4,7 @@ import legacyRoutes from "../fixtures/legacy-routes.json";
 
 const publicRoutes = legacyRoutes.routes.filter((route) => route.expectedStatus === 200);
 const approvedRedesignHeadings: Record<string, string> = {
-  "/": "IFFY",
+  "/": "Advice you can hold me to.",
   "/areas": "Dubai and Abu Dhabi area guides",
 };
 
@@ -271,6 +271,29 @@ test("mobile navigation closes on Escape and restores the document", async ({ pa
   await expect(page.locator("#mobile-navigation")).toBeHidden();
   await expect(trigger).toBeFocused();
   await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+});
+
+test("mobile navigation stays concise and traps focus through its close control", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  const navigation = page.getByRole("navigation", { name: "Mobile navigation" });
+  await expect(navigation.getByRole("link")).toHaveText([
+    "Buy",
+    "Sell",
+    "About",
+    "Talk to me",
+  ]);
+
+  const buy = navigation.getByRole("link", { name: "Buy", exact: true });
+  await expect(buy).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(
+    page.getByRole("button", { name: "Close navigation" }),
+  ).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(buy).toBeFocused();
 });
 
 test("mobile navigation closes when the viewport crosses to desktop", async ({ page }) => {

@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { FormPicker } from "./form-picker";
 
 export type AreaGoal = "live" | "invest" | "both";
 export type BudgetBand = "b1" | "b2" | "b3" | "b4";
@@ -131,54 +132,61 @@ export function AreaFinder() {
   }
 
   return (
-    <form onSubmit={submit} className="space-y-10">
-      <p className="text-lg text-stone-600">Five questions. Your best-fit areas.</p>
-      {QUESTIONS.map((question, index) => (
-        <fieldset key={question.name} className="space-y-4">
-          <legend className="text-lg font-medium text-stone-950">
-            <span className="mr-3 text-sm tabular-nums text-stone-500">{String(index + 1).padStart(2, "0")}</span>
-            {question.legend}
-          </legend>
-          <div className="flex flex-wrap gap-2">
-            {question.options.map(([value, label]) => {
-              const selected = answers[question.name] === value;
-              return (
-                <label key={value} className={`cursor-pointer rounded-full px-4 py-3 text-sm transition has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 ${selected ? "bg-stone-950 text-white" : "bg-stone-100 text-stone-700 hover:bg-stone-200"}`}>
-                  <input
-                    className="sr-only"
-                    type="radio"
-                    name={question.name}
-                    value={value}
-                    checked={selected}
-                    onChange={() => setAnswers((current) => ({ ...current, [question.name]: value }))}
-                  />
-                  {label}
-                </label>
-              );
-            })}
-          </div>
-        </fieldset>
-      ))}
-      <button type="submit" className="min-h-11 rounded-full bg-stone-950 px-6 py-3 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">
-        Show my areas
-      </button>
-      {error ? <p role="alert" className="text-sm text-red-700">{error}</p> : null}
+    <div>
+      <FormPicker
+        actionLabel="Show where to start"
+        answers={answers}
+        error={error}
+        onAnswer={(name, value) => {
+          setAnswers((current) => ({ ...current, [name]: value }));
+          setResults(null);
+          setError("");
+        }}
+        onSubmit={submit}
+        questions={QUESTIONS}
+      />
+
       {results ? (
-        <div aria-live="polite" className="space-y-8 bg-stone-100 p-6 sm:p-8">
-          <h3 className="text-2xl font-medium text-stone-950">Your best-fit areas</h3>
-          <ol className="space-y-8">
-            {results.map((area) => (
-              <li key={area.name}>
-                <h4 className="text-lg font-medium text-stone-950">{area.name}</h4>
-                <p className="mt-2 text-stone-600">{area.fit}</p>
-                <p className="mt-2 text-sm text-stone-500">{area.view}</p>
+        <section
+          aria-live="polite"
+          className="mt-14 bg-[var(--ink)] px-6 py-10 text-[var(--limestone)] sm:px-10 sm:py-12"
+        >
+          <h3 className="max-w-2xl text-3xl font-medium tracking-[-0.035em] sm:text-4xl">
+            Where I would start
+          </h3>
+          <ol className="mt-8 border-t border-[color-mix(in_oklch,var(--limestone)_22%,transparent)]">
+            {results.map((area, index) => (
+              <li
+                className="grid gap-3 border-b border-[color-mix(in_oklch,var(--limestone)_22%,transparent)] py-7 sm:grid-cols-[3rem_minmax(0,0.8fr)_minmax(0,1.2fr)] sm:gap-6"
+                key={area.name}
+              >
+                <span className="text-sm tabular-nums text-[var(--sea-glass)]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h4 className="text-xl font-medium">{area.name}</h4>
+                  <p className="mt-2 leading-7 text-[var(--limestone-deep)]">
+                    {area.fit}
+                  </p>
+                </div>
+                <p className="leading-7 text-[var(--limestone-deep)]">
+                  {area.view}
+                </p>
               </li>
             ))}
           </ol>
-          <p className="text-sm text-stone-500">Based on your answers. Iffy weighs service charges, build quality and live launches.</p>
-          <Link href="/?intent=buying#consultation" className="inline-flex min-h-11 items-center rounded-full bg-stone-950 px-5 py-3 text-sm font-medium text-white">Discuss these areas with Iffy</Link>
-        </div>
+          <p className="mt-7 max-w-2xl text-base leading-7 text-[var(--limestone-deep)]">
+            This is a first pass. Service charges, build quality, exact stock and
+            exit demand can change the recommendation.
+          </p>
+          <Link
+            className="mt-7 inline-flex min-h-12 items-center rounded-full bg-[var(--sea-glass)] px-6 py-3 text-base font-medium text-[var(--ink)] transition-colors hover:bg-[var(--limestone)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--sea-glass)]"
+            href="/?intent=buying#consultation"
+          >
+            Discuss the shortlist with Iffy
+          </Link>
+        </section>
       ) : null}
-    </form>
+    </div>
   );
 }
